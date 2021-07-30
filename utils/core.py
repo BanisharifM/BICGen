@@ -68,9 +68,9 @@ class DataVisualizer:
 
     def linear_chart(self, x_col, y_col):
         grouped_df: DataFrame = self.df.groupby([x_col])[y_col]
-        labels = grouped_df.unique().keys().tolist()
+        values = grouped_df.sum().sort_values(ascending=False)
+        labels = values.index.to_list()
         labels = [tr.fill(label, width=10) for label in labels]
-        values = grouped_df.sum().values
         fig, ax = plt.subplots()
         ax.plot(labels, values)
         plt.xticks(rotation=40)
