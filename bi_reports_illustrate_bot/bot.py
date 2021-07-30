@@ -7,7 +7,7 @@ from .models import TelegramUser, TelegramChat, TelegramState
 from utils.core import DataVisualizer
 
 import logging
-logging.basicConfig(level='debug')
+logging.basicConfig(level='DEBUG')
 
 
 class TelegramBot(AbstractTelegramBot):
