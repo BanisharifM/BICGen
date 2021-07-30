@@ -21,10 +21,10 @@ class DataVisualizer:
 
     # Country - Product - Units Sold
     def multi_group_chart(self, groups_col, bars_col, y_col):
-        grouped_df = self.df.groupby([bars_col, groups_col])[y_col]
-        groups = grouped_df.unique().index.get_level_values(1).unique().tolist()
-        bar_labels = grouped_df.unique().index.get_level_values(0).unique().tolist()
-        grouped_df = grouped_df.sum()
+        grouped_df = self.df.groupby([bars_col, groups_col])[y_col].sum()
+        groups = grouped_df.index.get_level_values(1).unique().tolist()
+        bar_labels = grouped_df.index.get_level_values(0).unique().tolist()
+        # grouped_df = grouped_df.sum()
         x = np.arange(stop=2*len(groups), step=2)  # the label locations
         group_width = 1  # the width of the bars
 
@@ -55,9 +55,9 @@ class DataVisualizer:
     # pie chart
     def pie_chart(self, x_col, y_col):
         # Pie chart, where the slices will be ordered and plotted counter-clockwise:
-        grouped_df: DataFrame = self.df.groupby([x_col])[y_col]
-        labels = grouped_df.unique().keys().tolist()
-        values = grouped_df.sum().values
+        values = self.df.groupby([x_col])[y_col].sum()
+        labels = values.index.to_list()
+        # labels = [tr.fill(label, width=10) for label in labels]
         # explode = (0, 0.1, 0, 0)  # only "explode" the 2nd slice (i.e. 'Hogs')
         explode = [0 for i in range(len(labels))]
         fig, ax = plt.subplots()
@@ -67,8 +67,7 @@ class DataVisualizer:
         return fig
 
     def linear_chart(self, x_col, y_col):
-        grouped_df: DataFrame = self.df.groupby([x_col])[y_col]
-        values = grouped_df.sum().sort_values(ascending=False)
+        values = self.df.groupby([x_col])[y_col].sum().sort_values(ascending=False)
         labels = values.index.to_list()
         labels = [tr.fill(label, width=10) for label in labels]
         fig, ax = plt.subplots()
@@ -82,14 +81,14 @@ class DataVisualizer:
         return fig
 
     def bar_chart(self, x_col, y_col):
-        labels = self.df[x_col].unique()
+        values = self.df.groupby([x_col])[y_col].sum().sort_values(ascending=False)
+        labels = values.index.to_list()
         labels = [tr.fill(label, width=10) for label in labels]
-        values = self.df.groupby([x_col])[y_col].sum()
         # fig, axs = plt.subplots(nrows=1, ncols=1, figsize=(9, 3))
         fig, ax = plt.subplots()
         ax.bar(labels, values)
         plt.xticks(rotation=40)
-        plt.subplots_adjust(bottom=0.25)
+        plt.subplots_adjust(bottom=0.25, left=0.15)
         ax.set_ylabel(y_col, labelpad=5, fontweight='bold', wrap=True)
         ax.set_xlabel(x_col, labelpad=10, fontweight='bold', wrap=True)
 
