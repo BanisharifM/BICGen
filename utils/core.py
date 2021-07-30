@@ -21,10 +21,10 @@ class DataVisualizer:
 
     # Country - Product - Units Sold
     def multi_group_chart(self, groups_col, bars_col, y_col):
-        groups = self.df[groups_col].unique()
-        bar_labels = self.df[bars_col].unique()
-        grouped_df = self.df.groupby([bars_col, groups_col])[y_col].sum()
-
+        grouped_df = self.df.groupby([bars_col, groups_col])[y_col]
+        groups = grouped_df.unique().index.get_level_values(1).unique().tolist()
+        bar_labels = grouped_df.unique().index.get_level_values(0).unique().tolist()
+        grouped_df = grouped_df.sum()
         x = np.arange(stop=2*len(groups), step=2)  # the label locations
         group_width = 1  # the width of the bars
 
@@ -37,17 +37,18 @@ class DataVisualizer:
             rects.append(ax.bar(x + cur_pos, grouped_df[bar_label].values, bar_width, label=bar_label))
             cur_pos += bar_width
 
-        # Add some text for labels, title and custom x-axis tick labels, etc.
-        # ax.set_ylabel('Units Sold')
         # ax.set_title('Units Sold  - by Country and Product')
         ax.set_xticks(x)
-        ax.set_xticklabels([tr.fill(g, width=10) for g in groups])
+        ax.set_xticklabels([tr.fill(g, width=10) for g in groups], wrap=True)
+        ax.set_ylabel(y_col, labelpad=5, fontweight='bold', wrap=True)
+        ax.set_xlabel(groups_col, labelpad=5, fontweight='bold', wrap=True)
         ax.legend()
 
         # for r in rects:
         #     ax.bar_label(r, padding=3)
         # ax.bar_label(rects2, padding=3)
 
+        fig.suptitle(f'{y_col} by {groups_col} and {bars_col}')
         fig.tight_layout()
         return fig
 
@@ -56,30 +57,43 @@ class DataVisualizer:
         # Pie chart, where the slices will be ordered and plotted counter-clockwise:
         grouped_df: DataFrame = self.df.groupby([x_col])[y_col]
         labels = grouped_df.unique().keys().tolist()
-        grouped_df = grouped_df.sum()
+        values = grouped_df.sum().values
         # explode = (0, 0.1, 0, 0)  # only "explode" the 2nd slice (i.e. 'Hogs')
         explode = [0 for i in range(len(labels))]
         fig, ax = plt.subplots()
-        ax.pie(grouped_df.values, explode=explode, labels=labels, autopct='%1.1f%%', startangle=90)
+        ax.pie(values, explode=explode, labels=labels, autopct='%1.1f%%', startangle=90)
         ax.axis('equal')  # Equal aspect ratio ensures that pie is drawn as a circle.
         fig.suptitle(f'{y_col} by {x_col}')
         return fig
 
     def linear_chart(self, x_col, y_col):
-        labels = self.df[x_col].unique()
-        values = self.df.groupby([x_col])[y_col].sum()
-        fig, axs = plt.subplots()
-        axs.plot([tr.fill(label, width=5) for label in labels], values)
-        # fig.suptitle('Categorical Plotting')
+        grouped_df: DataFrame = self.df.groupby([x_col])[y_col]
+        labels = grouped_df.unique().keys().tolist()
+        labels = [tr.fill(label, width=10) for label in labels]
+        values = grouped_df.sum().values
+        fig, ax = plt.subplots()
+        ax.plot(labels, values)
+        plt.xticks(rotation=40)
+        plt.subplots_adjust(bottom=0.25)
+        ax.set_ylabel(y_col, labelpad=5, fontweight='bold', wrap=True)
+        ax.set_xlabel(x_col, labelpad=10, fontweight='bold', wrap=True)
+
+        fig.suptitle(f'{y_col} by {x_col}')
         return fig
 
     def bar_chart(self, x_col, y_col):
         labels = self.df[x_col].unique()
+        labels = [tr.fill(label, width=10) for label in labels]
         values = self.df.groupby([x_col])[y_col].sum()
         # fig, axs = plt.subplots(nrows=1, ncols=1, figsize=(9, 3))
-        fig, axs = plt.subplots()
-        axs.bar([tr.fill(label, width=5) for label in labels], values)
-        # fig.suptitle('Categorical Plotting')
+        fig, ax = plt.subplots()
+        ax.bar(labels, values)
+        plt.xticks(rotation=40)
+        plt.subplots_adjust(bottom=0.25)
+        ax.set_ylabel(y_col, labelpad=5, fontweight='bold', wrap=True)
+        ax.set_xlabel(x_col, labelpad=10, fontweight='bold', wrap=True)
+
+        fig.suptitle(f'{y_col} by {x_col}')
         return fig
 
     # def save_fig(self, rel_file_path):
@@ -96,7 +110,10 @@ class DataVisualizer:
             method_to_call = getattr(self, method_name)
             fig = method_to_call(*args)
             if not rel_path:
-                rel_path = f'figs/{method_name}_{datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")}.png'
+                name_str = f'{method_name}_{args[-1]}_by_{args[0]}'
+                for i in range(len(args)-2):
+                    name_str += f'_and_{args[i+1]}'
+                rel_path = f'figs/{name_str}_{datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")}.png'
             full_path = settings.MEDIA_ROOT / rel_path
             fig.savefig(full_path)
             return full_path
@@ -105,3 +122,8 @@ class DataVisualizer:
             print(str(e))
             return False
 
+    def show(self):
+        plt.show()
+
+
+# def word_wrapper()

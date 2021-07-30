@@ -99,6 +99,8 @@ def input_params(bot: TelegramBot, update: Update, state: TelegramState):
         if rem_params == 0:
             state.set_name('draw')
             res = MessageText.CTD.value
+            msg_id = state.get_memory().get('params_message_id')
+            bot.deleteMessage(chat_id, msg_id)
             bot.sendMessage(chat_id, res, reply_markup=draw_keyboard)
         else:
             if rem_params == 1:
