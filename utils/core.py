@@ -54,14 +54,16 @@ class DataVisualizer:
     # pie chart
     def pie_chart(self, x_col, y_col):
         # Pie chart, where the slices will be ordered and plotted counter-clockwise:
-        labels = self.df[x_col].unique()
-        grouped_df = self.df.groupby([x_col])[y_col].sum()
+        grouped_df: DataFrame = self.df.groupby([x_col])[y_col]
+        labels = grouped_df.unique().keys().tolist()
+        grouped_df = grouped_df.sum()
         # explode = (0, 0.1, 0, 0)  # only "explode" the 2nd slice (i.e. 'Hogs')
         explode = [0 for i in range(len(labels))]
-        fig1, ax1 = plt.subplots()
-        ax1.pie(grouped_df.values, explode=explode, labels=labels, autopct='%1.1f%%', startangle=90)
-        ax1.axis('equal')  # Equal aspect ratio ensures that pie is drawn as a circle.
-        return fig1
+        fig, ax = plt.subplots()
+        ax.pie(grouped_df.values, explode=explode, labels=labels, autopct='%1.1f%%', startangle=90)
+        ax.axis('equal')  # Equal aspect ratio ensures that pie is drawn as a circle.
+        fig.suptitle(f'{y_col} by {x_col}')
+        return fig
 
     def linear_chart(self, x_col, y_col):
         labels = self.df[x_col].unique()
