@@ -25,9 +25,9 @@ class TelegramBot(AbstractTelegramBot):
 
     def pre_processing(self, update: Update, user, db_user, chat, db_chat, state: TelegramState):
         super(TelegramBot, self).pre_processing(update, user, db_user, chat, db_chat, state)
-        print(50 * '-')
-        print(f'state memory is : {state.get_memory()}')
-        print(f'state name is : {state.name}')
+        # print(50 * '-')
+        # print(f'state memory is : {state.get_memory()}')
+        # print(f'state name is : {state.name}')
         try:
             from .processors.utils import ButtonText, menu_keyboard
             msg = update.get_message().get_text()
@@ -36,17 +36,19 @@ class TelegramBot(AbstractTelegramBot):
             elif msg == ButtonText.CNL.value:
                 state.set_name('menu')
                 bot.sendMessage(update.get_chat().get_id(), ButtonText.CNL.value, reply_markup=menu_keyboard)
-            # elif msg == ButtonText.DRW.value:
-            #     state.set_name('menu')
-            #     bot.sendMessage(update.get_chat().get_id(), ButtonText.DRW.value, reply_markup=menu_keyboard)
+                memory_state = state.get_memory()
+                msg_id = memory_state.pop('params_message_id', None)
+                if msg_id is not None:
+                    bot.deleteMessage(update.get_chat().get_id(), msg_id)
+                    state.set_memory(memory_state)
         except Exception as e:
             print(str(e))
 
     def post_processing(self, update: Update, user, db_user, chat, db_chat, state: TelegramState):
         super(TelegramBot, self).post_processing(update, user, db_user, chat, db_chat, state)
-        print(f'state memory is : {state.get_memory()}')
-        print(f'state name is : {state.name}')
-        print(50 * '-')
+        # print(f'state memory is : {state.get_memory()}')
+        # print(f'state name is : {state.name}')
+        # print(50 * '-')
 
 def import_processors():
     from . import processors
