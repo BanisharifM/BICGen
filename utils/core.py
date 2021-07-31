@@ -21,32 +21,44 @@ class DataVisualizer:
 
     # Country - Product - Units Sold
     def multi_group_chart(self, groups_col, bars_col, y_col):
-        grouped_df = self.df.groupby([bars_col, groups_col])[y_col].sum()
-        groups = grouped_df.index.get_level_values(1).unique().tolist()
-        bar_labels = grouped_df.index.get_level_values(0).unique().tolist()
-        # grouped_df = grouped_df.sum()
-        x = np.arange(stop=2*len(groups), step=2)  # the label locations
+        sorted_groups_col = self.df.groupby([groups_col], sort=False)[y_col].sum().sort_values(ascending=False).index
+
+        def sort_countries(keys):
+            return [sorted_groups_col.tolist().index(country) for country in keys]
+
+        # grouped_df = self.df.groupby([bars_col, groups_col], sort=False)[y_col].sum().reindex(
+        #     sorted_groups_col, level=1)
+        grouped_df = self.df.groupby([bars_col, groups_col], sort=False)[y_col].sum().sort_index(
+            level=1, key=sort_countries)
+        bar_labels = grouped_df.index.get_level_values(0).unique()
+        x = np.arange(stop=2*len(sorted_groups_col), step=2)  # the label locations
         group_width = 1  # the width of the bars
 
         fig, ax = plt.subplots()
 
-        rects = []
+        # rects = []
         bar_width = group_width / len(bar_labels)
         cur_pos = -group_width / 2
         for bar_label in bar_labels:
-            rects.append(ax.bar(x + cur_pos, grouped_df[bar_label].values, bar_width, label=bar_label))
+            ax.bar(x + cur_pos, grouped_df[bar_label].values, bar_width, label=bar_label)
             cur_pos += bar_width
+
+            # Store bars for bar labeling
+            # rects.append(ax.bar(x + cur_pos, grouped_df[bar_label].values, bar_width, label=bar_label))
+            # if bar_label != 'Carretera':
+            #     rects.pop()
+
+        # Set Label of value on top of each bar
+        # for r in rects:
+        #     ax.bar_label(r, padding=3)
+        # ax.bar_label(rects, padding=3)
 
         # ax.set_title('Units Sold  - by Country and Product')
         ax.set_xticks(x)
-        ax.set_xticklabels([tr.fill(g, width=10) for g in groups], wrap=True)
+        ax.set_xticklabels([tr.fill(g, width=10) for g in sorted_groups_col], wrap=True)
         ax.set_ylabel(y_col, labelpad=5, fontweight='bold', wrap=True)
         ax.set_xlabel(groups_col, labelpad=5, fontweight='bold', wrap=True)
         ax.legend()
-
-        # for r in rects:
-        #     ax.bar_label(r, padding=3)
-        # ax.bar_label(rects2, padding=3)
 
         fig.suptitle(f'{y_col} by {groups_col} and {bars_col}')
         fig.tight_layout()
