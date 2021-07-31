@@ -67,7 +67,7 @@ class DataVisualizer:
     # pie chart
     def pie_chart(self, x_col, y_col):
         # Pie chart, where the slices will be ordered and plotted counter-clockwise:
-        values = self.df.groupby([x_col])[y_col].sum()
+        values = self.df.groupby([x_col])[y_col].sum().sort_values(ascending=True)
         labels = values.index.to_list()
         # labels = [tr.fill(label, width=10) for label in labels]
         # explode = (0, 0.1, 0, 0)  # only "explode" the 2nd slice (i.e. 'Hogs')
