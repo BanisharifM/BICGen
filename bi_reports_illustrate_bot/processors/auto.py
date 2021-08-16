@@ -19,7 +19,7 @@ for kb_name, data in keyboards_data.items():
     if data['type'] == 'inline':
         keyboards[kb_name] = InlineKeyboardMarkup.a(
             [[InlineKeyboardButton.a(
-                text=buttons_data[btn]['text']) for btn in btn_list] for btn_list in data["buttons"]]
+                text=buttons_data[btn]['text'], callback_data=buttons_data[btn]['text']) for btn in btn_list] for btn_list in data["buttons"]]
         )
     elif data['type'] == 'reply':
         keyboards[kb_name] = ReplyKeyboardMarkup.a(
@@ -41,7 +41,7 @@ for st_name, data in states_data.items():
     if queries:
         query_keyboards[st_name] = InlineKeyboardMarkup.a(
             [[InlineKeyboardButton.a(
-                text=queries_data[query_name]['text'])] for query_name in queries]
+                text=queries_data[query_name]['text'], callback_data=queries_data[query_name]['text'])] for query_name in queries]
         )
 
 just_before_query_states = [re.sub('(.*)_.*', r'\1', qkb) for qkb in query_keyboards]
@@ -118,6 +118,11 @@ def run_query(bot: TelegramBot, update: Update, state: TelegramState):
 
 code = ""
 for state_name, data in states_data.items():
+    query_list = ""
+    if state_name in just_before_query_states:
+        query_list="""res = bot.sendMessage(chat_id, next_state_message, reply_markup=query_keyboards[next_state_name])
+            print(res,flush=True)"""
+            
     if state_name in query_keyboards:
         state_code = f"""query_obj = get_query_obj({state_name}, msg)
         if not query_obj:
@@ -136,9 +141,9 @@ for state_name, data in states_data.items():
             next_state_keyboard_name = next_state['keyboards'][0]
             next_state_keyboard = keyboards[next_state_keyboard_name]
             next_state_message = next_state["msgs"][0]
-            res = bot.sendMessage(chat_id, next_state_message, reply_markup=next_state_keyboard)
-            {'bot.sendMessage(chat_id, next_state_message, reply_markup=query_keyboards[next_state_name])'
-            if state_name in just_before_query_states else ''}"""
+            bot.sendMessage(chat_id, next_state_message, reply_markup=next_state_keyboard)
+            {query_list}"""
+            
     code += f"""@processor(state_manager, from_states="{state_name}")
 def {state_name}(bot, update, state):
     chat_id = update.get_chat().get_id()
@@ -151,6 +156,8 @@ def {state_name}(bot, update, state):
             msg = update.get_message().get_text()
         if button_trans.get(msg, None):
             msg = button_trans[msg]
+        if msg in ["back", "home"]:
+            return
         {state_code}
 
     except Exception as e:
