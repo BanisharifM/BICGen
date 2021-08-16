@@ -84,6 +84,22 @@ def auth(bot: TelegramBot, update: Update, state: TelegramState):
         raise ProcessFailure
 
 
+@processor(state_manager, from_states='filter_query')
+def run_query(bot: TelegramBot, update: Update, state: TelegramState):
+    chat_id = update.get_chat().get_id()
+    try:
+        if update.is_callback_query():
+            callback_query = update.get_callback_query()
+            msg = callback_query.get_data()
+            bot.answerCallbackQuery(callback_query_id=callback_query.get_id(), text="Received!")
+        else:
+            msg = update.get_message().get_text()
+    except Exception as e:
+        print(str(e))
+        bot.sendMessage(chat_id, MessageText.UEX.value)
+        # raise ProcessFailure
+
+
 @processor(state_manager, from_states='run_query')
 def run_query(bot: TelegramBot, update: Update, state: TelegramState):
     chat_id = update.get_chat().get_id()
@@ -103,25 +119,25 @@ def run_query(bot: TelegramBot, update: Update, state: TelegramState):
 code = ""
 for state_name, data in states_data.items():
     if state_name in query_keyboards:
-        state_code = f"""bot.sendMessage(chat_id, "in process")
-        state.set_name("run_query")
+        state_code = f"""query_obj = get_query_obj({state_name}, msg)
+        if not query_obj:
+            bot.sendMessage(chat_id, MessageText.PVC.value)
+            return
+        state.set_name("filter_query")
         state_obj = state.get_memory()
-        state_obj.update({{"state": "{state_name}"}})"""
+        state_obj.update_memory({{"state": "{state_name}", "query": msg}})"""
     else:
         state_code = f"""next_state_name = "{state_name+'_'}" + msg
         next_state = states_data.get(next_state_name, None)
         if next_state is None:
-            bot.sendMessage(chat_id, MessageText.UEX.value)
+            bot.sendMessage(chat_id, MessageText.PVC.value)
         else:
             state.set_name(next_state_name)
             next_state_keyboard_name = next_state['keyboards'][0]
-            print(next_state_keyboard_name)
             next_state_keyboard = keyboards[next_state_keyboard_name]
-            print(next_state_keyboard.to_dict())
             next_state_message = next_state["msgs"][0]
-            print(next_state_message, flush=True)
-            bot.sendMessage(chat_id, next_state_message, next_state_keyboard)
-            {'bot.sendMessage(chat_id, next_state_message, query_keyboards[next_state_name])'
+            res = bot.sendMessage(chat_id, next_state_message, reply_markup=next_state_keyboard)
+            {'bot.sendMessage(chat_id, next_state_message, reply_markup=query_keyboards[next_state_name])'
             if state_name in just_before_query_states else ''}"""
     code += f"""@processor(state_manager, from_states="{state_name}")
 def {state_name}(bot, update, state):
@@ -144,3 +160,17 @@ def {state_name}(bot, update, state):
 re.sub('\n\t', '\n', code)
 # print(code)
 exec(code)
+
+def get_valid_query_names(state_name: str):
+    data = states_data.get(state_name, None)
+    if data is None or data.get('queries', None) is None:
+        return []
+    return [queries_data[q_name]['text'] for q_name in data['queries']]
+
+def get_query_obj(state_name: str, query_name: str):
+    data = states_data.get(state_name, None)
+    if data:
+        state_queries = data.get('queries', None)
+        if state_queries and query_name in state_queries:
+            return queries_data.get(query_name, None)
+    return None

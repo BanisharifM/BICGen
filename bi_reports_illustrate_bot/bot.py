@@ -29,15 +29,26 @@ class TelegramBot(AbstractTelegramBot):
         # bot.sendMessage(chat_id, f'state memory is : {state.get_memory()}')
         # bot.sendMessage(chat_id, f'state name is : {state.name}')
         print(50 * '-')
-        print(f'state memory is : {state.get_memory()}')
+        # print(f'state memory is : {state.get_memory()}')
         print(f'state name is : {state.name}')
         print(flush=True)
         # bot.sendMessage(, 'developer test')
+        from bi_reports_illustrate_bot.processors.auto import keyboards, states_data, button_trans
+        import re
+        
         try:
             from .processors.utils import ButtonText, menu_keyboard
             msg = update.get_message().get_text()
-            if msg == '/reset':
+            if button_trans.get(msg, None):
+                msg = button_trans[msg]
+            if msg in ['/reset', '/start']:
                 state.set_name('')
+            elif msg in ['back', 'home']:
+                next_state_name = 'auth_home' if msg == 'home' else re.sub('(.*)_.*', r'\1', state.name)
+                state.set_name(next_state_name)
+                keyboard_name = states_data[next_state_name]['keyboards'][0]
+                next_state_keyboard = keyboards[keyboard_name]
+                bot.sendMessage(chat_id, msg, reply_markup=next_state_keyboard)
             elif msg == ButtonText.CNL.value:
                 state.set_name('menu')
                 bot.sendMessage(update.get_chat().get_id(), ButtonText.CNL.value, reply_markup=menu_keyboard)
@@ -51,7 +62,7 @@ class TelegramBot(AbstractTelegramBot):
 
     def post_processing(self, update: Update, user, db_user, chat, db_chat, state: TelegramState):
         super(TelegramBot, self).post_processing(update, user, db_user, chat, db_chat, state)
-        print(f'state memory is : {state.get_memory()}')
+        # print(f'state memory is : {state.get_memory()}')
         print(f'state name is : {state.name}')
         print(50 * '-')
         print(flush=True)
@@ -67,5 +78,5 @@ def import_processors():
 dv = DataVisualizer(rel_file_path='Financial Sample.xlsx')
 state_manager = StateManager()
 bot = TelegramBot(bot_token, state_manager)
-bot.setMyCommands([BotCommand.a('reset', 'Restart Your Connection with Bot')])
+bot.setMyCommands([BotCommand.a('restart', 'Restart The Bot'), BotCommand.a('start', 'Start The Bot')])
 import_processors()

@@ -27,6 +27,7 @@ class MessageText(Enum):
     CTD = 'Click on download button for downloading the chart'
     INV = 'Invalid Choice '
     CNL = 'If you want to cancel the process, click on cancel button'
+    PVC = 'Please Enter a valid choice'
 
 
 class ButtonText(Enum):
