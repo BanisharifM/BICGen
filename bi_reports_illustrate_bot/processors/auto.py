@@ -3,14 +3,16 @@ from .utils import *
 import json
 import re
 
-buttons_data = json.load(open("../data/buttons.json"))
-keyboards_data: dict = json.load(open("../data/keyboards.json"))
-states_data = json.load(open("../data/states.json"))
-queries_data = json.load(open("../data/queries.json"))
+from django.conf import settings
+
+buttons_data = json.load(open(settings.BASE_DIR/"bi_reports_illustrate_bot/data/buttons.json"))
+keyboards_data: dict = json.load(open(settings.BASE_DIR/"bi_reports_illustrate_bot/data/keyboards.json"))
+states_data = json.load(open(settings.BASE_DIR/"bi_reports_illustrate_bot/data/states.json"))
+queries_data = json.load(open(settings.BASE_DIR/"bi_reports_illustrate_bot/data/queries.json"))
 
 # create keyboards
 keyboards = dict()
-for kb_name, data in keyboards_data:
+for kb_name, data in keyboards_data.items():
     if data['type'] == 'inline':
         keyboards[kb_name] = InlineKeyboardMarkup.a(
             [[InlineKeyboardButton.a(
@@ -31,7 +33,7 @@ auth_keyboard = ReplyKeyboardMarkup.a(keyboard=[
 
 # create inline query keyboards
 query_keyboards = dict()
-for st_name, data in states_data:
+for st_name, data in states_data.items():
     queries = data.get('queries', None)
     if queries:
         query_keyboards[st_name] = InlineKeyboardMarkup.a(
@@ -93,18 +95,15 @@ def run_query(bot: TelegramBot, update: Update, state: TelegramState):
         # raise ProcessFailure
 
 
-nl = '\n'
 code = ""
-for state_name, data in states_data:
+for state_name, data in states_data.items():
     if state_name in query_keyboards:
-        state_code = f"""\
-                bot.sendMessage(chat_id, "in process")
+        state_code = f"""bot.sendMessage(chat_id, "in process")
                 state.set_name("run_query")
                 state_obj = state.get_memory()
-                state_obj.update({{"state": {state_name}}})"""
+                state_obj.update({{"state": "{state_name}"}})"""
     else:
-        state_code = f"""\
-                next_state_name = {state_name+'_'}+msg
+        state_code = f"""next_state_name = "{state_name+'_'}" + msg
                 next_state = states_data.get(next_state_name, None)
                 if next_state is None:
                     bot.sendMessage(chat_id, MessageText.UEX.value)
@@ -116,8 +115,7 @@ for state_name, data in states_data:
                     bot.sendMessage(chat_id, next_state_message, next_state_keyboard)
                     {'bot.sendMessage(chat_id, next_state_message, query_keyboards[next_state_name])'
                     if state_name in just_before_query_states else ''}"""
-    code += f"""\
-    @processor(state_manager, from_states={state_name})
+    code += f"""@processor(state_manager, from_states="{state_name}")
     def {state_name}(bot, update, state):
         chat_id = update.get_chat().get_id()
         try:
@@ -132,7 +130,7 @@ for state_name, data in states_data:
         except Exception as e:
             print(str(e))
             bot.sendMessage(chat_id, MessageText.UEX.value)
-            raise ProcessFailure
-    """
+            raise ProcessFailure\n\n\n"""
+re.sub('\n\t', '\n', code)
 print(code)
-exec(code)
+# exec(code)
