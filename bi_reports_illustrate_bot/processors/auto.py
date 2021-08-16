@@ -76,28 +76,34 @@ def auth(bot: TelegramBot, update: Update, state: TelegramState):
         bot.sendMessage(chat_id, MessageText.UEX.value, reply_markup=auth_keyboard)
         raise ProcessFailure
 
-# query_states_code = ""
+
+@processor(state_manager, from_states='run_query')
+def run_query(bot: TelegramBot, update: Update, state: TelegramState):
+    chat_id = update.get_chat().get_id()
+    try:
+        if update.is_callback_query():
+            callback_query = update.get_callback_query()
+            msg = callback_query.get_data()
+            bot.answerCallbackQuery(callback_query_id=callback_query.get_id(), text="Received!")
+        else:
+            msg = update.get_message().get_text()
+    except Exception as e:
+        print(str(e))
+        bot.sendMessage(chat_id, MessageText.UEX.value)
+        # raise ProcessFailure
 
 
 nl = '\n'
 code = ""
 for state_name, data in states_data:
-    code += f"""\
-    @processor(state_manager, from_states={state_name})
-    def {state_name}(bot, update, state):
-        chat_id = update.get_chat().get_id()
-        try:
-            if update.is_callback_query():
-                callback_query = update.get_callback_query()
-                msg = callback_query.get_data()
-                bot.answerCallbackQuery(callback_query_id=callback_query.get_id(), text="Received!")
-            else:
-                msg = update.get_message().get_text()
-                {f'bot.sendMessage(chat_id, "in process")' + f'{nl}' + 
-                'state.set_name("run_query")' + f'{nl}' + 
-                'state_obj = state.get_memory()' + f'{nl}' + 
-                f'state_obj.update({{"state": {state_name}}})' + f'{nl}'
-                if state_name in query_keyboards else ''}
+    if state_name in query_keyboards:
+        state_code = f"""\
+                bot.sendMessage(chat_id, "in process")
+                state.set_name("run_query")
+                state_obj = state.get_memory()
+                state_obj.update({{"state": {state_name}}})"""
+    else:
+        state_code = f"""\
                 next_state_name = {state_name+'_'}+msg
                 next_state = states_data.get(next_state_name, None)
                 if next_state is None:
@@ -109,11 +115,24 @@ for state_name, data in states_data:
                     next_state_message = next_state[msgs][0]
                     bot.sendMessage(chat_id, next_state_message, next_state_keyboard)
                     {'bot.sendMessage(chat_id, next_state_message, query_keyboards[next_state_name])'
-                    if state_name in just_before_query_states else ''}
-            
+                    if state_name in just_before_query_states else ''}"""
+    code += f"""\
+    @processor(state_manager, from_states={state_name})
+    def {state_name}(bot, update, state):
+        chat_id = update.get_chat().get_id()
+        try:
+            if update.is_callback_query():
+                callback_query = update.get_callback_query()
+                msg = callback_query.get_data()
+                bot.answerCallbackQuery(callback_query_id=callback_query.get_id(), text="Received!")
+            else:
+                msg = update.get_message().get_text()
+                {state_code}
+
         except Exception as e:
             print(str(e))
             bot.sendMessage(chat_id, MessageText.UEX.value)
             raise ProcessFailure
     """
+print(code)
 exec(code)
