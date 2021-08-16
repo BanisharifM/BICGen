@@ -17,7 +17,7 @@ import numpy as np
 
 
 class MessageText(Enum):
-    WEL = 'Hi {}, Welcome to the Report BI Bot. Click on Authorization button to authorize'
+    WEL = 'Hi {},  Welcome to the CBIC.\nIf you are sure you are registered in the bot, click the “Authenticate”.\nOtherwise, contact to admin.'
     SLG = 'You has been authorized by {} mobile number'  # Successful login
     REP = 'The {} field has been entered before! Please choose another field'  # Repetitive
     NFU = 'The field {} not found! Please chose a valid field'  # Not FoUnd
@@ -28,6 +28,7 @@ class MessageText(Enum):
     INV = 'Invalid Choice '
     CNL = 'If you want to cancel the process, click on cancel button'
     PVC = 'Please Enter a valid choice'
+    FSU = 'The field has updated successfully!'
 
 
 class ButtonText(Enum):

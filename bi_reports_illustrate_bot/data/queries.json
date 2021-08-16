@@ -1,6 +1,6 @@
 {
   "q1": {
-    "text": "test",
+    "text": "Report1",
     "params": ["Product", "Country"],
     "target": "Sold Units",
     "filters": "Date",
@@ -8,21 +8,21 @@
     "roles": ["manager", "owner"]
   },
   "q2": {
-    "text": "test",
+    "text": "Report2",
     "params": ["Product", "Country"],
     "target": "Sold Units",
     "charts": ["Multi Group Chart"],
     "roles": ["manager", "owner"]
   },
   "q3": {
-    "text": "test",
+    "text": "Report3",
     "params": ["Product", "Country"],
     "target": "Sold Units",
     "charts": ["Multi Group Chart"],
     "roles": ["manager", "owner"]
   },
   "q4": {
-    "text": "test",
+    "text": "Report4",
     "params": ["Product", "Country"],
     "target": "Sold Units",
     "charts": ["Multi Group Chart"],

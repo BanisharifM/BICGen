@@ -38,10 +38,15 @@ class TelegramBot(AbstractTelegramBot):
         
         try:
             from .processors.utils import ButtonText, menu_keyboard
-            msg = update.get_message().get_text()
+            if update.is_callback_query():
+                callback_query = update.get_callback_query()
+                msg = callback_query.get_data()
+                bot.answerCallbackQuery(callback_query_id=callback_query.get_id(), text="Received!")
+            else:
+                msg = update.get_message().get_text()
             if button_trans.get(msg, None):
                 msg = button_trans[msg]
-            if msg in ['/reset', '/start']:
+            if msg in ['/restart', '/start']:
                 state.set_name('')
             elif msg in ['back', 'home']:
                 next_state_name = 'auth_home' if msg == 'home' else re.sub('(.*)_.*', r'\1', state.name)

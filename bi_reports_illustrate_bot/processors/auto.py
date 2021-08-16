@@ -75,7 +75,8 @@ def auth(bot: TelegramBot, update: Update, state: TelegramState):
             state.update_memory({
                 'profile': {
                     'first_name': '',
-                    'last_name': ''
+                    'last_name': '',
+                    'mobile_number': mobile_number
                 }
             })
     except Exception as e:
@@ -124,6 +125,7 @@ for state_name, data in states_data.items():
             print(res,flush=True)"""
             
     if state_name in query_keyboards:
+        # print("WE ARE IN QUERY KEYBOARDA!!!", flush=True)
         state_code = f"""query_obj = get_query_obj({state_name}, msg)
         if not query_obj:
             bot.sendMessage(chat_id, MessageText.PVC.value)
@@ -131,7 +133,11 @@ for state_name, data in states_data.items():
         state.set_name("filter_query")
         state_obj = state.get_memory()
         state_obj.update_memory({{"state": "{state_name}", "query": msg}})"""
+    elif states_data[state_name].get('input', None):
+        state_code= f"""set_vars_from_msg(state, "{states_data[state_name]['input']}", msg)
+        go_to_prev_state(bot, state, MessageText.FSU.value)"""
     else:
+        # print("WE AER IN ELSE!!!", flush=True)
         state_code = f"""next_state_name = "{state_name+'_'}" + msg
         next_state = states_data.get(next_state_name, None)
         if next_state is None:
@@ -141,7 +147,8 @@ for state_name, data in states_data.items():
             next_state_keyboard_name = next_state['keyboards'][0]
             next_state_keyboard = keyboards[next_state_keyboard_name]
             next_state_message = next_state["msgs"][0]
-            bot.sendMessage(chat_id, next_state_message, reply_markup=next_state_keyboard)
+            trim_message = message_trans(state, next_state_message)
+            bot.sendMessage(chat_id, trim_message, reply_markup=next_state_keyboard)
             {query_list}"""
             
     code += f"""@processor(state_manager, from_states="{state_name}")
@@ -181,3 +188,40 @@ def get_query_obj(state_name: str, query_name: str):
         if state_queries and query_name in state_queries:
             return queries_data.get(query_name, None)
     return None
+
+
+def message_trans(state: TelegramState, msg: str):
+    vars = re.findall('\{.*?\}', msg)
+    for var in vars:
+        trim_var = var[1:-1]
+        parts = trim_var.split('.')
+        state_obj = state.get_memory()
+        result = state_obj
+        for part in parts:
+            result = result.get(part, None)
+            if result is None:
+                return None
+        msg = msg.replace(var, result)
+    return msg
+
+def set_vars_from_msg(state: TelegramState, var: str, res: str):
+    trim_var = var[1:-1]
+    parts = trim_var.split('.')
+    state_obj = state.get_memory()[parts[0]]
+    if len(parts) == 2:
+        state_obj[parts[1]] = res
+    elif len(parts) == 1:
+        state_obj = res
+    state.update_memory({parts[0]: state_obj})
+    
+    
+def go_to_prev_state(bot, state: TelegramState, msg):
+    chat_id = state.telegram_chat.telegram_id
+    next_state_name =  re.sub('(.*)_.*', r'\1', state.name)
+    state.set_name(next_state_name)
+    keyboard_name = states_data[next_state_name]['keyboards'][0]
+    next_state_keyboard = keyboards[keyboard_name]
+    bot.sendMessage(chat_id, msg, reply_markup=next_state_keyboard)
+    
+# def go_to_home(state):
+    

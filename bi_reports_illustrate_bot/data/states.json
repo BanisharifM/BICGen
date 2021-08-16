@@ -4,7 +4,7 @@
       "home"
     ],
     "msgs": [
-      "You successfully authorized! Choose an action"
+      "You are authenticated successfully."
     ]
   },
   "auth_home_settings": {
@@ -12,7 +12,7 @@
       "settings"
     ],
     "msgs": [
-      "choose!"
+      "Please select one of these."
     ]
   },
   "auth_home_settings_help": {
@@ -20,7 +20,7 @@
       "back_and_home"
     ],
     "msgs": [
-      "choose!"
+      "Hi {profile.first_name}! 🌷\n\n1️⃣ You can make a report 📝, by:\nHome 👉 Make a Report 👉 [selecting report section] 👉 [select report] 👉 [filter parameter of report]\n\n2️⃣ You can see your past reports 📃, by:\nHome 👉 Reports List 👉 [filter List by date]\n\n3️⃣ You can see your profile and change it ✏️, by:\nHome 👉 Profile 👉 Change Profile 👉 [changing item you allowed]\n\n4️⃣ You can go settings ⚙ and see About, Help and Support, by:\nHome 👉 settings\n\nIf there’s a question click “Support” and send a ticket to us. 🙏"
     ]
   },
   "auth_home_settings_about": {
@@ -28,7 +28,7 @@
       "back_and_home"
     ],
     "msgs": [
-      "choose!"
+      "This bot was  born to make a report for business intelligence.\nYou will be able to customize it too.\nVersion 1.0.0"
     ]
   },
   "auth_home_settings_support": {
@@ -36,7 +36,7 @@
       "support"
     ],
     "msgs": [
-      "choose!"
+      "Please select one of these."
     ]
   },
   "auth_home_settings_support_newTicket": {
@@ -52,7 +52,7 @@
       "profile"
     ],
     "msgs": [
-      "$profile"
+      "Your Profile:\nFirst Name: {profile.first_name}\nLast Name: {profile.last_name}\nPhone Number: {profile.mobile_number}"
     ]
   },
   "auth_home_profile_changeProfile": {
@@ -60,25 +60,33 @@
       "changeProfile"
     ],
     "msgs": [
-      "choose!"
+      "You can change your First Name and LastName.\nFor changing Phone Number send a ticket to us."
     ]
   },
   "auth_home_profile_changeProfile_firstName": {
-    "input": "$profile.first_name",
+    "input": "{profile.first_name}",
     "keyboards": [
       "back_and_home"
     ],
     "msgs": [
-      "choose!"
+      "Please enter your First Name."
     ]
   },
-  "auth_home_changeProfile_lastName": {
-    "input": "$profile.last_name",
+  "auth_home_profile_changeProfile_lastName": {
+    "input": "{profile.last_name}",
     "keyboards": [
       "back_and_home"
     ],
     "msgs": [
-      "choose!"
+      "Please enter your Last Name."
+    ]
+  },
+  "auth_home_reportList": {
+    "keyboards": [
+      "back_and_home"
+    ],
+    "msgs": [
+      "Under Construction..."
     ]
   },
   "auth_home_newReport": {
@@ -86,7 +94,7 @@
       "sections"
     ],
     "msgs": [
-      "choose!"
+      "Please select one of these."
     ]
   },
   "auth_home_newReport_fin": {
@@ -94,7 +102,7 @@
       "finSections"
     ],
     "msgs": [
-      "choose!"
+      "Please select one of these."
     ]
   },
   "auth_home_newReport_fin_sell": {
@@ -102,7 +110,7 @@
       "back_and_home"
     ],
     "msgs": [
-      "choose!"
+      "Please select one of these."
     ],
     "queries": [
       "q1",
@@ -114,7 +122,7 @@
       "back_and_home"
     ],
     "msgs": [
-      "choose!"
+      "Please select one of these."
     ],
     "queries": [
       "q1",
@@ -126,7 +134,7 @@
       "hrSections"
     ],
     "msgs": [
-      "choose!"
+      "Please select one of these."
     ]
   },
   "auth_home_newReport_hr_recruitment": {
@@ -134,7 +142,7 @@
       "back_and_home"
     ],
     "msgs": [
-      "choose!"
+      "Please select one of these."
     ],
     "queries": [
       "q1",
@@ -146,7 +154,7 @@
       "back_and_home"
     ],
     "msgs": [
-      "choose!"
+      "Please select one of these."
     ],
     "queries": [
       "q1",
