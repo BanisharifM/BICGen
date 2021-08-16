@@ -21,7 +21,8 @@ def handle_bot_request(request):
         bot.handle_update(update)
     except Exception as e:
         if settings.DEBUG:
-            raise e
+            # raise e
+            logging.exception(e)
         else:
             logging.exception(e)
     return HttpResponse("OK")

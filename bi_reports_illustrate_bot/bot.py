@@ -24,10 +24,15 @@ class TelegramBot(AbstractTelegramBot):
         return TelegramState.objects.get_or_create(telegram_user=db_user, telegram_chat=db_chat)[0]
 
     def pre_processing(self, update: Update, user, db_user, chat, db_chat, state: TelegramState):
+        chat_id = update.get_chat().get_id()
         super(TelegramBot, self).pre_processing(update, user, db_user, chat, db_chat, state)
-        # print(50 * '-')
-        # print(f'state memory is : {state.get_memory()}')
-        # print(f'state name is : {state.name}')
+        # bot.sendMessage(chat_id, f'state memory is : {state.get_memory()}')
+        # bot.sendMessage(chat_id, f'state name is : {state.name}')
+        print(50 * '-')
+        print(f'state memory is : {state.get_memory()}')
+        print(f'state name is : {state.name}')
+        print(flush=True)
+        # bot.sendMessage(, 'developer test')
         try:
             from .processors.utils import ButtonText, menu_keyboard
             msg = update.get_message().get_text()
@@ -46,9 +51,13 @@ class TelegramBot(AbstractTelegramBot):
 
     def post_processing(self, update: Update, user, db_user, chat, db_chat, state: TelegramState):
         super(TelegramBot, self).post_processing(update, user, db_user, chat, db_chat, state)
-        # print(f'state memory is : {state.get_memory()}')
-        # print(f'state name is : {state.name}')
-        # print(50 * '-')
+        print(f'state memory is : {state.get_memory()}')
+        print(f'state name is : {state.name}')
+        print(50 * '-')
+        print(flush=True)
+        chat_id = update.get_chat().get_id()
+        # bot.sendMessage(chat_id, f'state memory is : {state.get_memory()}')
+        # bot.sendMessage(chat_id, f'state name is : {state.name}')
 
 
 def import_processors():

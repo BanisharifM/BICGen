@@ -10,6 +10,9 @@ keyboards_data: dict = json.load(open(settings.BASE_DIR/"bi_reports_illustrate_b
 states_data = json.load(open(settings.BASE_DIR/"bi_reports_illustrate_bot/data/states.json"))
 queries_data = json.load(open(settings.BASE_DIR/"bi_reports_illustrate_bot/data/queries.json"))
 
+# buttons translator
+button_trans = {v['text']: k for k,v in buttons_data.items()}
+
 # create keyboards
 keyboards = dict()
 for kb_name, data in keyboards_data.items():
@@ -63,11 +66,13 @@ def auth(bot: TelegramBot, update: Update, state: TelegramState):
         mobile_number = f"{update.get_message().contact.phone_number}"
         # if mobile_number[0] != '+':
         #     mobile_number = '+' + mobile_number
-        res = MessageText.SLG.value.format(mobile_number)
-        bot.sendMessage(chat_id, res, reply_markup=keyboards['home'])
+        # res = MessageText.SLG.value.format(mobile_number)
+        res_text = states_data['auth_home']['msgs'][0]
+        res_keyboard = keyboards[states_data['auth_home']['keyboards'][0]]
+        bot.sendMessage(chat_id, res_text, reply_markup=res_keyboard)
         state_obj = state.get_memory()
         if state_obj.get('profile', None) is None:
-            state_obj.update({
+            state.update_memory({
                 'profile': {
                     'first_name': '',
                     'last_name': ''
@@ -99,38 +104,43 @@ code = ""
 for state_name, data in states_data.items():
     if state_name in query_keyboards:
         state_code = f"""bot.sendMessage(chat_id, "in process")
-                state.set_name("run_query")
-                state_obj = state.get_memory()
-                state_obj.update({{"state": "{state_name}"}})"""
+        state.set_name("run_query")
+        state_obj = state.get_memory()
+        state_obj.update({{"state": "{state_name}"}})"""
     else:
         state_code = f"""next_state_name = "{state_name+'_'}" + msg
-                next_state = states_data.get(next_state_name, None)
-                if next_state is None:
-                    bot.sendMessage(chat_id, MessageText.UEX.value)
-                else:
-                    state.set_name(next_state)
-                    next_state_keyboard_name = next_state['keyboards'][0]
-                    next_state_keyboard = keyboards[next_state_keyboard_name]
-                    next_state_message = next_state[msgs][0]
-                    bot.sendMessage(chat_id, next_state_message, next_state_keyboard)
-                    {'bot.sendMessage(chat_id, next_state_message, query_keyboards[next_state_name])'
-                    if state_name in just_before_query_states else ''}"""
-    code += f"""@processor(state_manager, from_states="{state_name}")
-    def {state_name}(bot, update, state):
-        chat_id = update.get_chat().get_id()
-        try:
-            if update.is_callback_query():
-                callback_query = update.get_callback_query()
-                msg = callback_query.get_data()
-                bot.answerCallbackQuery(callback_query_id=callback_query.get_id(), text="Received!")
-            else:
-                msg = update.get_message().get_text()
-                {state_code}
-
-        except Exception as e:
-            print(str(e))
+        next_state = states_data.get(next_state_name, None)
+        if next_state is None:
             bot.sendMessage(chat_id, MessageText.UEX.value)
-            raise ProcessFailure\n\n\n"""
+        else:
+            state.set_name(next_state_name)
+            next_state_keyboard_name = next_state['keyboards'][0]
+            print(next_state_keyboard_name)
+            next_state_keyboard = keyboards[next_state_keyboard_name]
+            print(next_state_keyboard.to_dict())
+            next_state_message = next_state["msgs"][0]
+            print(next_state_message, flush=True)
+            bot.sendMessage(chat_id, next_state_message, next_state_keyboard)
+            {'bot.sendMessage(chat_id, next_state_message, query_keyboards[next_state_name])'
+            if state_name in just_before_query_states else ''}"""
+    code += f"""@processor(state_manager, from_states="{state_name}")
+def {state_name}(bot, update, state):
+    chat_id = update.get_chat().get_id()
+    try:
+        if update.is_callback_query():
+            callback_query = update.get_callback_query()
+            msg = callback_query.get_data()
+            bot.answerCallbackQuery(callback_query_id=callback_query.get_id(), text="Received!")
+        else:
+            msg = update.get_message().get_text()
+        if button_trans.get(msg, None):
+            msg = button_trans[msg]
+        {state_code}
+
+    except Exception as e:
+        print(str(e))
+        bot.sendMessage(chat_id, MessageText.UEX.value)
+        raise ProcessFailure\n\n\n"""
 re.sub('\n\t', '\n', code)
-print(code)
-# exec(code)
+# print(code)
+exec(code)

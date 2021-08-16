@@ -1,4 +1,12 @@
 {
+  "auth_home": {
+    "keyboards": [
+      "home"
+    ],
+    "msgs": [
+      "You successfully authorized! Choose an action"
+    ]
+  },
   "auth_home_settings": {
     "keyboards": [
       "settings"
