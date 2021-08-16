@@ -1,0 +1,31 @@
+{
+  "q1": {
+    "text": "test",
+    "params": ["Product", "Country"],
+    "target": "Sold Units",
+    "filters": "Date",
+    "charts": ["Multi Group Chart"],
+    "roles": ["manager", "owner"]
+  },
+  "q2": {
+    "text": "test",
+    "params": ["Product", "Country"],
+    "target": "Sold Units",
+    "charts": ["Multi Group Chart"],
+    "roles": ["manager", "owner"]
+  },
+  "q3": {
+    "text": "test",
+    "params": ["Product", "Country"],
+    "target": "Sold Units",
+    "charts": ["Multi Group Chart"],
+    "roles": ["manager", "owner"]
+  },
+  "q4": {
+    "text": "test",
+    "params": ["Product", "Country"],
+    "target": "Sold Units",
+    "charts": ["Multi Group Chart"],
+    "roles": ["manager", "owner"]
+  }
+}

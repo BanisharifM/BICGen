@@ -1,0 +1,148 @@
+{
+  "auth_home_settings": {
+    "keyboards": [
+      "settings"
+    ],
+    "msgs": [
+      "choose!"
+    ]
+  },
+  "auth_home_settings_help": {
+    "keyboards": [
+      "back_and_home"
+    ],
+    "msgs": [
+      "choose!"
+    ]
+  },
+  "auth_home_settings_about": {
+    "keyboards": [
+      "back_and_home"
+    ],
+    "msgs": [
+      "choose!"
+    ]
+  },
+  "auth_home_settings_support": {
+    "keyboards": [
+      "support"
+    ],
+    "msgs": [
+      "choose!"
+    ]
+  },
+  "auth_home_settings_support_newTicket": {
+    "keyboards": [
+      "back_and_home"
+    ],
+    "msgs": [
+      "Under Construction..."
+    ]
+  },
+  "auth_home_profile": {
+    "keyboards": [
+      "profile"
+    ],
+    "msgs": [
+      "$profile"
+    ]
+  },
+  "auth_home_profile_changeProfile": {
+    "keyboards": [
+      "changeProfile"
+    ],
+    "msgs": [
+      "choose!"
+    ]
+  },
+  "auth_home_profile_changeProfile_firstName": {
+    "input": "$profile.first_name",
+    "keyboards": [
+      "back_and_home"
+    ],
+    "msgs": [
+      "choose!"
+    ]
+  },
+  "auth_home_changeProfile_lastName": {
+    "input": "$profile.last_name",
+    "keyboards": [
+      "back_and_home"
+    ],
+    "msgs": [
+      "choose!"
+    ]
+  },
+  "auth_home_newReport": {
+    "keyboards": [
+      "sections"
+    ],
+    "msgs": [
+      "choose!"
+    ]
+  },
+  "auth_home_newReport_fin": {
+    "keyboards": [
+      "finSections"
+    ],
+    "msgs": [
+      "choose!"
+    ]
+  },
+  "auth_home_newReport_fin_sell": {
+    "keyboards": [
+      "back_and_home"
+    ],
+    "msgs": [
+      "choose!"
+    ],
+    "queries": [
+      "q1",
+      "q2"
+    ]
+  },
+  "auth_home_newReport_fin_profit": {
+    "keyboards": [
+      "back_and_home"
+    ],
+    "msgs": [
+      "choose!"
+    ],
+    "queries": [
+      "q1",
+      "q2"
+    ]
+  },
+  "auth_home_newReport_hr": {
+    "keyboards": [
+      "hrSections"
+    ],
+    "msgs": [
+      "choose!"
+    ]
+  },
+  "auth_home_newReport_hr_recruitment": {
+    "keyboards": [
+      "back_and_home"
+    ],
+    "msgs": [
+      "choose!"
+    ],
+    "queries": [
+      "q1",
+      "q2"
+    ]
+  },
+  "auth_home_newReport_hr_fire": {
+    "keyboards": [
+      "back_and_home"
+    ],
+    "msgs": [
+      "choose!"
+    ],
+    "queries": [
+      "q1",
+      "q2"
+    ]
+  }
+}

@@ -1,0 +1,122 @@
+{
+  "auth": {
+    "type": "reply",
+    "buttons": [
+      [
+        "auth"
+      ]
+    ]
+  },
+  "home": {
+    "type": "reply",
+    "buttons": [
+      [
+        "report",
+        "reportList"
+      ],
+      [
+        "profile",
+        "settings"
+      ]
+    ]
+  },
+  "settings": {
+    "type": "reply",
+    "buttons": [
+      [
+        "help",
+        "about",
+        "support"
+      ],
+      [
+        "home",
+        "back"
+      ]
+    ]
+  },
+  "back_and_home": {
+    "type": "reply",
+    "text": "Choose!",
+    "buttons": [
+      [
+        "home",
+        "back"
+      ]
+    ]
+  },
+  "support": {
+    "type": "reply",
+    "buttons": [
+      [
+        "newTicket"
+      ],
+      [
+        "home",
+        "back"
+      ]
+    ]
+  },
+  "profile": {
+    "type": "inline",
+    "buttons": [
+      [
+        "changeProfile"
+      ],
+      [
+        "home"
+      ]
+    ]
+  },
+  "changeProfile": {
+    "type": "reply",
+    "buttons": [
+      [
+        "firstName",
+        "lastName"
+      ],
+      [
+        "home",
+        "back"
+      ]
+    ]
+  },
+  "sections": {
+    "type": "reply",
+    "buttons": [
+      [
+        "hr",
+        "fin"
+      ]
+    ]
+  },
+  "finSections": {
+    "type": "reply",
+    "buttons": [
+      [
+        "sell",
+        "profit"
+      ]
+    ]
+  },
+  "hrSections": {
+    "type": "reply",
+    "buttons": [
+      [
+        "recruitment",
+        "fire"
+      ]
+    ]
+  },
+  "listQueries": {
+    "type": "reply",
+    "buttons": [
+      [
+        "listQueries"
+      ],
+      [
+        "home",
+        "back"
+      ]
+    ]
+  }
+}

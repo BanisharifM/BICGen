@@ -18,8 +18,8 @@ import numpy as np
 
 class MessageText(Enum):
     WEL = 'Hi {}, Welcome to the Report BI Bot. Click on Authorization button to authorize'
-    SLG = 'You has been authorized by {} mobile number'    # Successful login
-    REP = 'The {} field has been entered before! Please choose another field'   # Repetitive
+    SLG = 'You has been authorized by {} mobile number'  # Successful login
+    REP = 'The {} field has been entered before! Please choose another field'  # Repetitive
     NFU = 'The field {} not found! Please chose a valid field'  # Not FoUnd
     UEX = 'An unexpected problem occurred! Try enter the fields from first again'
     CHP = 'Choose {}th parameter'
@@ -48,7 +48,6 @@ charts = {
     ButtonText.LIN.value: 2
 }
 
-
 # Inline Buttons
 # inline_pay_button = InlineKeyboardButton.a(text=ButtonText.PAY.value, callback_data=ButtonText.PAY.value)
 # inline_pay_button.a(text='ali')
@@ -59,7 +58,8 @@ charts = {
 # Inline Keyboards
 # select_cols_inline_keyboard = InlineKeyboardMarkup.a(inline_keyboard=[[inline_pay_button]])
 input_params_keyboard = InlineKeyboardMarkup.a(inline_keyboard=[
-    list(x) for x in np.array_split([InlineKeyboardButton.a(text=c, callback_data=c) for c in dv.get_all_fields()], dv.num_of_fields()/3)
+    list(x) for x in np.array_split([InlineKeyboardButton.a(text=c, callback_data=c) for c in dv.get_all_fields()],
+                                    dv.num_of_fields() / 3)
 ])
 # Reply Buttons
 
