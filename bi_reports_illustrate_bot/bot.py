@@ -32,12 +32,9 @@ class TelegramBot(AbstractTelegramBot):
         # print(f'state memory is : {state.get_memory()}')
         print(f'state name is : {state.name}')
         print(flush=True)
-        # bot.sendMessage(, 'developer test')
-        from bi_reports_illustrate_bot.processors.auto import keyboards, states_data, button_trans
-        import re
-        
+        # bot.sendMessage(, 'developer test')        
         try:
-            from .processors.utils import ButtonText, menu_keyboard
+            from .processors.utils import go_to_prev_state, button_trans, go_to_state
             if update.is_callback_query():
                 callback_query = update.get_callback_query()
                 msg = callback_query.get_data()
@@ -48,20 +45,24 @@ class TelegramBot(AbstractTelegramBot):
                 msg = button_trans[msg]
             if msg in ['/restart', '/start']:
                 state.set_name('')
-            elif msg in ['back', 'home']:
-                next_state_name = 'auth_home' if msg == 'home' else re.sub('(.*)_.*', r'\1', state.name)
-                state.set_name(next_state_name)
-                keyboard_name = states_data[next_state_name]['keyboards'][0]
-                next_state_keyboard = keyboards[keyboard_name]
+            elif msg == 'home':
+                next_state_keyboard = go_to_state(bot, state, 'auth_home')
                 bot.sendMessage(chat_id, msg, reply_markup=next_state_keyboard)
-            elif msg == ButtonText.CNL.value:
-                state.set_name('menu')
-                bot.sendMessage(update.get_chat().get_id(), ButtonText.CNL.value, reply_markup=menu_keyboard)
-                memory_state = state.get_memory()
-                msg_id = memory_state.pop('params_message_id', None)
-                if msg_id is not None:
-                    bot.deleteMessage(update.get_chat().get_id(), msg_id)
-                    state.set_memory(memory_state)
+            elif msg == 'back':
+                go_to_prev_state(bot,state, msg)
+                # if state.name == MEDIA_STATE:
+                # if state.name.startswith('query')
+                # next_state_name = re.sub('(.*)_.*', r'\1', state.name)
+                # next_state_keyboard = go_to_state(state, next_state_name)
+                # bot.sendMessage(chat_id, msg, reply_markup=next_state_keyboard)
+            # elif msg == ButtonText.CNL.value:
+            #     state.set_name('menu')
+            #     bot.sendMessage(update.get_chat().get_id(), ButtonText.CNL.value, reply_markup=menu_keyboard)
+            #     memory_state = state.get_memory()
+            #     msg_id = memory_state.pop('params_message_id', None)
+            #     if msg_id is not None:
+            #         bot.deleteMessage(update.get_chat().get_id(), msg_id)
+            #         state.set_memory(memory_state)
         except Exception as e:
             print(str(e))
 

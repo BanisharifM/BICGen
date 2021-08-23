@@ -1,118 +1,77 @@
 {
     "auth": {
-        "id": 1,
         "text": "Authentication \ud83d\udd10"
     },
     "home": {
-        "id": 2,
         "text": "\ud83c\udfd8 Home"
     },
     "newReport": {
-        "id": 3,
         "text": "Make a Report \ud83d\udcdd"
     },
     "reportList": {
-        "id": 4,
         "text": "Reports List \ud83d\udcc3"
     },
     "profile": {
-        "id": 5,
         "text": "Profile \ud83d\udc64"
     },
     "settings": {
-        "id": 6,
         "text": "Settings \u2699"
     },
     "help": {
-        "id": 7,
         "text": "Help \ud83d\udca1"
     },
     "support": {
-        "id": 8,
         "text": "Support \ud83d\udc68\u200d\ud83d\udcbb"
     },
     "about": {
-        "id": 9,
         "text": "About \ud83e\udea7"
     },
     "back": {
-        "id": 10,
         "text": "\ud83d\udd19 Back"
     },
     "newTicket": {
-        "id": 11,
         "text": "New Ticket \ud83d\udcec"
     },
     "reply": {
-        "id": 12,
         "text": "\u21a9 reply"
     },
     "close": {
-        "id": 13,
         "text": "close \u274c"
     },
     "changeProfile": {
-        "id": 14,
         "text": "Change Profile"
     },
     "firstName": {
-        "id": 15,
         "text": "First Name"
     },
     "lastName": {
-        "id": 16,
         "text": "Last Name"
     },
     "prev": {
-        "id": 17,
         "text": "\u2b05 Previous"
     },
     "next": {
-        "id": 18,
         "text": "Next \u27a1"
     },
     "hr": {
-        "id": 19,
         "text": "HR"
     },
     "fin": {
-        "id": 20,
         "text": "Financial"
     },
     "recruitment": {
-        "id": 21,
         "text": "Recruitment"
     },
     "fire": {
-        "id": 22,
         "text": "Fire"
     },
     "profit": {
-        "id": 23,
         "text": "Profit"
     },
     "sell": {
-        "id": 24,
         "text": "Sell"
     },
-    "pie": {
-        "id": 25,
-        "text": "Pie Chart"
-    },
-    "multiGroup": {
-        "id": 26,
-        "text": "Multi-group Chart"
-    },
-    "bar": {
-        "id": 27,
-        "text": "Bar Chart"
-    },
-    "linear": {
-        "id": 28,
-        "text": "Linear Chart"
-    },
     "listQueries": {
-        "id": 29,
         "text": "List Reports"
     }
 }
