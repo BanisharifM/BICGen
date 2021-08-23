@@ -2,7 +2,7 @@
   "q1": {
     "text": "Report1",
     "params": ["Product", "Country"],
-    "target": "Sold Units",
+    "target": "Units Sold",
     "filters": ["Date"],
     "charts": ["Multi Group Chart"],
     "roles": ["manager", "owner"]
@@ -10,7 +10,7 @@
   "q2": {
     "text": "Report2",
     "params": ["Product", "Country"],
-    "target": "Sold Units",
+    "target": "Units Sold",
     "filters": [],
     "charts": ["Multi Group Chart"],
     "roles": ["manager", "owner"]
@@ -18,7 +18,7 @@
   "q3": {
     "text": "Report3",
     "params": ["Product", "Country"],
-    "target": "Sold Units",
+    "target": "Units Sold",
     "filters": [],
     "charts": ["Multi Group Chart"],
     "roles": ["manager", "owner"]
@@ -26,7 +26,7 @@
   "q4": {
     "text": "Report4",
     "params": ["Product", "Country"],
-    "target": "Sold Units",
+    "target": "Units Sold",
     "filters": [],
     "charts": ["Multi Group Chart"],
     "roles": ["manager", "owner"]

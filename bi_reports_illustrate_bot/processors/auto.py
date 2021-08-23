@@ -55,7 +55,7 @@ def filter_query(bot: TelegramBot, update: Update, state: TelegramState):
         if button_trans.get(msg, None):
             msg = button_trans[msg]
             
-        if msg == ButtonText.FNS.value:
+        if msg == "finish":
             next_state_name = state.name + '_run'
             go_to_state(bot, state, next_state_name)
             bot.sendMessage(chat_id,'choose:', reply_markup=chart_keyboards[state_obj.get('query')])
@@ -96,20 +96,21 @@ def adjust_filter(bot: TelegramBot, update: Update, state: TelegramState):
         if button_trans.get(msg, None):
             msg = button_trans[msg]
             
-        cur_filter = state_obj['filters'].keys()[-1]
+        cur_filter = list(state_obj['filters'].keys())[-1]
         
+        print(f"message is {msg}")
         # go to run the query
-        if msg == ButtonText.ACP.value:
+        if msg == "accept":
             bot.sendMessage(chat_id, MessageText.FAD.value.format(cur_filter))
             go_to_prev_state(bot, state)
-        elif msg == ButtonText.CNL.value:
-            state_obj['filters'].pop(cur_filter)
+        elif msg == "cancel":
+            state_obj['filters'].pop(cur_filter, None)
             state.set_memory(state_obj)
             go_to_prev_state(bot, state)
             
         # TODO: write some code to get filter params and adjust filter        
         elif msg in ['test']:
-            pass
+            print("you hit some filter adjusment")
         
         
     except Exception as e:
@@ -135,7 +136,7 @@ def run_query(bot: TelegramBot, update: Update, state: TelegramState):
         
         query_obj = queries_data.get(state_obj.get('query'))
         
-        if msg in query_obj['charts']:  
+        if msg in query_obj['charts']:
             method_of_drawing = msg.lower().replace(' ', '_')
             full_path = dv.draw_and_save_fig(method_of_drawing, *query_obj['params'], query_obj['target'])
             if full_path:
@@ -150,15 +151,18 @@ def run_query(bot: TelegramBot, update: Update, state: TelegramState):
 
 
 code = ""
-for state_name, data in states_data.items():
+for state_name in [x for x in states_data if not x.startswith(MEDIA_STATE)]:
+    # if we need to construct the keyboard of queries, do it before going to last dynamic state
     query_list = ""
     if state_name in just_before_query_states:
-        query_list="""res = bot.sendMessage(chat_id, next_state_message, reply_markup=query_keyboards[next_state_name])"""            
+        query_list=f"""print("we are in if state_name in just_before_query_states and state: {state_name}")
+        bot.sendMessage(chat_id, "choose:", reply_markup=query_keyboards[next_state_name])"""
         
+    # determine what we can do in final part of code
     if state_name in query_keyboards:
         # print("WE ARE IN QUERY KEYBOARDA!!!", flush=True)
-        state_code = f"""query_obj = get_query_obj({state_name}, msg)
-        if not query_obj:
+        state_code = f"""print(f"we are in elif state_name in query_keyboards and state: {state_name}")
+        if msg not in states_data["{state_name}"]["queries"]:
             bot.sendMessage(chat_id, MessageText.PVC.value)
         else:
             state_obj = state.get_memory()
@@ -169,11 +173,12 @@ for state_name, data in states_data.items():
             go_to_state(bot, state, MEDIA_STATE)
             bot.sendMessage(chat_id, "choose:", reply_markup=filter_keybaords[msg])"""
     elif states_data[state_name].get('input', None):
-        state_code= f"""set_vars_from_msg(state, "{states_data[state_name]['input']}", msg)
+        state_code= f"""print(f"we are in elif states_data[state_name].get('input', None): and state: {state_name}")
+        set_vars_from_msg(state, "{states_data[state_name]['input']}", msg)
         go_to_prev_state(bot, state, MessageText.FSU.value)"""
     else:
-        # print("WE AER IN ELSE!!!", flush=True)
-        state_code = f"""next_state_name = "{state_name+'_'}" + msg
+        state_code = f"""print(f"we are in else: and state: {state_name}")
+        next_state_name = "{state_name+'_'}" + msg
         next_state = states_data.get(next_state_name, None)
         if next_state is None:
             bot.sendMessage(chat_id, MessageText.PVC.value)
@@ -181,7 +186,8 @@ for state_name, data in states_data.items():
             go_to_state(bot,state, next_state_name)
             {query_list}"""
             
-    code += f"""@processor(state_manager, from_states="{state_name}")
+    code += f"""\
+@processor(state_manager, from_states="{state_name}")
 def {state_name}(bot, update, state):
     chat_id = update.get_chat().get_id()
     try:
@@ -203,4 +209,6 @@ def {state_name}(bot, update, state):
         raise ProcessFailure\n\n\n"""
 re.sub('\n\t', '\n', code)
 # print(code)
+# print(query_keyboards.keys())
+# print(just_before_query_states, flush=True)
 exec(code)

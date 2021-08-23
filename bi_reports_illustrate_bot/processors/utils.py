@@ -99,19 +99,22 @@ queries_data = json.load(open(settings.BASE_DIR/"bi_reports_illustrate_bot/data/
 # ], resize_keyboard=True)
 
 
-def get_valid_query_names(state_name: str):
-    data = states_data.get(state_name, None)
-    if data is None or data.get('queries', None) is None:
-        return []
-    return [queries_data[q_name]['text'] for q_name in data['queries']]
+# def get_valid_query_names(state_name: str):
+#     try:
+#         return states_data[state_name]['queries']
+#     except:
+#         return []
 
-def get_query_obj(state_name: str, query_name: str):
-    data = states_data.get(state_name, None)
-    if data:
-        state_queries = data.get('queries', None)
-        if state_queries and query_name in state_queries:
-            return queries_data.get(query_name, None)
-    return None
+
+# def get_query_obj(state_name: str, query_name: str):
+#     try:
+#         return states_data[state_name]['queries']
+#         data = states_data.get(state_name, None)
+#         if data:
+#             state_queries = data.get('queries', None)
+#             if state_queries and query_name in state_queries:
+#                 return queries_data.get(query_name, None)
+#         return None
 
 
 def message_trans(state: TelegramState, msg: str):
@@ -126,6 +129,8 @@ def message_trans(state: TelegramState, msg: str):
             if result is None:
                 return None
         msg = msg.replace(var, result)
+        print(msg)
+    print(msg, flush=True)
     return msg
 
 def set_vars_from_msg(state: TelegramState, var: str, res: str):
@@ -170,21 +175,21 @@ def register_static_data():
             "text": ButtonText.FNS.value
         },
         "accept": {
-            "text": ButtonText.FNS.value
+            "text": ButtonText.ACP.value
         },
         "cancel": {
-            "text": ButtonText.FNS.value
+            "text": ButtonText.CNL.value
         },
-        "pie": {
+        "Pie Chart": {
             "text": "Pie Chart"
         },
-        "multiGroup": {
+        "Multi Group Chart": {
             "text": "Multi Group Chart"
         },
-        "bar": {
+        "Bar Chart": {
             "text": "Bar Chart"
         },
-        "linear": {
+        "Linear Chart": {
             "text": "Linear Chart"
         },
         
@@ -304,7 +309,7 @@ for st_name, data in states_data.items():
         for query_name in queries:
             query_keyboard_inline_buttons.append([
                 InlineKeyboardButton.a(text=queries_data[query_name]['text'],
-                    callback_data=queries_data[query_name]['text']
+                    callback_data=query_name
                 )      
             ])
             if query_name not in filter_keybaords:

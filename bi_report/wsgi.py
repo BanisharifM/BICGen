@@ -15,4 +15,4 @@ os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'bi_report.settings')
 
 application = get_wsgi_application()
 
-# from bi_reports_illustrate_bot import bot
+from bi_reports_illustrate_bot import bot
