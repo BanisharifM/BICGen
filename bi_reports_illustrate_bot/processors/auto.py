@@ -26,12 +26,16 @@ def auth(bot: TelegramBot, update: Update, state: TelegramState):
         bot.sendMessage(chat_id, res_text, reply_markup=res_keyboard)
         state_obj = state.get_memory()
         if state_obj.get('profile', None) is None:
-            state.update_memory({
+            state.set_memory({
                 'profile': {
                     'first_name': '',
                     'last_name': '',
                     'mobile_number': mobile_number
                 }
+            })
+        else:
+            state.set_memory({
+               'profile': state_obj['profile']
             })
     except Exception as e:
         print(str(e))
@@ -54,16 +58,22 @@ def filter_query(bot: TelegramBot, update: Update, state: TelegramState):
         
         if button_trans.get(msg, None):
             msg = button_trans[msg]
-            
+        
+        if msg in ["back", "home"]:
+            return
+        
         if msg == "finish":
             next_state_name = state.name + '_run'
+            state_obj.setdefault("states", []).append(next_state_name + "_" + state_obj["query"])
+            state.set_memory(state_obj)
             go_to_state(bot, state, next_state_name)
-            bot.sendMessage(chat_id,'choose:', reply_markup=chart_keyboards[state_obj.get('query')])
         else:
-            query_obj = queries_data.get(state_obj.get('query'), None)
-            filters = query_obj.get('filters', None)
-            if msg in filters:
+            query_obj = queries_data.get(state_obj["query"], None)
+            if msg not in query_obj["filters"]:
+                bot.sendMessage(chat_id, MessageText.PVC.value)
+            else:
                 next_state_name = state.name + '_adjust'
+                state_obj.setdefault("states", []).append(next_state_name + "_" + msg)
                 filters = state_obj.get('filters', {})
                 
                 # TODO: the filter params for adjusment shoud be here
@@ -72,7 +82,6 @@ def filter_query(bot: TelegramBot, update: Update, state: TelegramState):
                 state_obj['filters'] = filters
                 state.set_memory(state_obj)
                 go_to_state(bot, state, next_state_name)
-                bot.sendMessage(chat_id,'choose:', reply_markup=fake_inline_keyboard)
             
     except Exception as e:
         print(str(e))
@@ -96,6 +105,9 @@ def adjust_filter(bot: TelegramBot, update: Update, state: TelegramState):
         if button_trans.get(msg, None):
             msg = button_trans[msg]
             
+        if msg in ["back", "home"]:
+            return
+        
         cur_filter = list(state_obj['filters'].keys())[-1]
         
         print(f"message is {msg}")
@@ -151,45 +163,41 @@ def run_query(bot: TelegramBot, update: Update, state: TelegramState):
 
 
 code = ""
-for state_name in [x for x in states_data if not x.startswith(MEDIA_STATE)]:
-    # if we need to construct the keyboard of queries, do it before going to last dynamic state
-    query_list = ""
-    if state_name in just_before_query_states:
-        query_list=f"""print("we are in if state_name in just_before_query_states and state: {state_name}")
-        bot.sendMessage(chat_id, "choose:", reply_markup=query_keyboards[next_state_name])"""
-        
-    # determine what we can do in final part of code
-    if state_name in query_keyboards:
-        # print("WE ARE IN QUERY KEYBOARDA!!!", flush=True)
-        state_code = f"""print(f"we are in elif state_name in query_keyboards and state: {state_name}")
-        if msg not in states_data["{state_name}"]["queries"]:
-            bot.sendMessage(chat_id, MessageText.PVC.value)
+for state_name, data in states_dynamic_data.items():        
+    # handle input
+    handle_input=""
+    if states_data[state_name].get('input', None):
+        handle_input= f"""set_vars_from_msg(state, "{data['input']}", msg)
+        state_obj = state.get_memory()"""
+    
+    # handle state    
+    if data.get('queries', None):
+        handle_state = f"""next_state_name = MEDIA_STATE + "_" + msg
+        if next_state_name in inline_keyboards:
+            state_obj["filters"] = dict()
+            state_obj.setdefault("states", []).append(next_state_name)
+            next_state_name = MEDIA_STATE
         else:
-            state_obj = state.get_memory()
-            state_obj.pop("filters", None)
-            state_obj["state"] = "{state_name}"
-            state_obj["query"] = msg
-            state.set_memory(state_obj)
-            go_to_state(bot, state, MEDIA_STATE)
-            bot.sendMessage(chat_id, "choose:", reply_markup=filter_keybaords[msg])"""
-    elif states_data[state_name].get('input', None):
-        state_code= f"""print(f"we are in elif states_data[state_name].get('input', None): and state: {state_name}")
-        set_vars_from_msg(state, "{states_data[state_name]['input']}", msg)
-        go_to_prev_state(bot, state, MessageText.FSU.value)"""
+            bot.sendMessage(chat_id, MessageText.PVC.value)
+            return"""
     else:
-        state_code = f"""print(f"we are in else: and state: {state_name}")
-        next_state_name = "{state_name+'_'}" + msg
-        next_state = states_data.get(next_state_name, None)
-        if next_state is None:
+        handle_state = f"""next_state_name = "{state_name+'_'}" + msg
+        if next_state_name not in states_dynamic_data:
             bot.sendMessage(chat_id, MessageText.PVC.value)
-        else:
-            go_to_state(bot,state, next_state_name)
-            {query_list}"""
-            
+            return"""
+    
+    # handle output
+    handle_output = f"""if next_state_name in inline_keyboards:
+            state_obj.setdefault("states", []).append(next_state_name)
+        state.set_memory(state_obj)
+        go_to_state(bot, state, next_state_name)"""
+    
     code += f"""\
 @processor(state_manager, from_states="{state_name}")
 def {state_name}(bot, update, state):
     chat_id = update.get_chat().get_id()
+    state_obj = state.get_memory()
+    
     try:
         if update.is_callback_query():
             callback_query = update.get_callback_query()
@@ -201,14 +209,14 @@ def {state_name}(bot, update, state):
             msg = button_trans[msg]
         if msg in ["back", "home"]:
             return
-        {state_code}
+            
+        {handle_input}
+        {handle_state}
+        {handle_output}
 
     except Exception as e:
         print(str(e))
         bot.sendMessage(chat_id, MessageText.UEX.value)
         raise ProcessFailure\n\n\n"""
 re.sub('\n\t', '\n', code)
-# print(code)
-# print(query_keyboards.keys())
-# print(just_before_query_states, flush=True)
 exec(code)

@@ -33,13 +33,13 @@ class MessageText(Enum):
     INV = 'Invalid Choice '
     CNL = 'If you want to cancel the process, click on cancel button'
     PVC = 'Please Enter a valid choice'
-    FSU = 'The field has been updated successfully!'
+    FSU = 'The field registered'
     CFT = 'Choose a filter'
     FAD = 'Filter {} added successfully!'
+    CHS = 'Choose'
 
 
 class ButtonText(Enum):
-    CNL = 'Cancel'
     PAY = 'Payment'
     PIE = 'Pie Chart'
     GRP = 'Multi Group Chart'
@@ -49,6 +49,7 @@ class ButtonText(Enum):
     DRW = 'Download'
     FNS = 'ّFinish'
     ACP = 'Accept'
+    CNL = 'Cancel'
     
 
 
@@ -62,59 +63,29 @@ charts = {
 
 MEDIA_STATE = 'query_filter'
 
-buttons_data = json.load(open(settings.BASE_DIR/"bi_reports_illustrate_bot/data/buttons.json"))
-keyboards_data: dict = json.load(open(settings.BASE_DIR/"bi_reports_illustrate_bot/data/keyboards.json"))
-states_data = json.load(open(settings.BASE_DIR/"bi_reports_illustrate_bot/data/states.json"))
-queries_data = json.load(open(settings.BASE_DIR/"bi_reports_illustrate_bot/data/queries.json"))
+buttons_dynamic_data = json.load(open(settings.BASE_DIR/"bi_reports_illustrate_bot/data/buttons.json"))
+keyboards_dynamic_data = json.load(open(settings.BASE_DIR/"bi_reports_illustrate_bot/data/keyboards.json"))
+states_dynamic_data = json.load(open(settings.BASE_DIR/"bi_reports_illustrate_bot/data/states.json"))
+queries_dynamic_data = json.load(open(settings.BASE_DIR/"bi_reports_illustrate_bot/data/queries.json"))
 
+buttons_static_data = json.load(open(settings.BASE_DIR/"bi_reports_illustrate_bot/static_data/buttons.json"))
+keyboards_static_data = json.load(open(settings.BASE_DIR/"bi_reports_illustrate_bot/static_data/keyboards.json"))
+states_static_data = json.load(open(settings.BASE_DIR/"bi_reports_illustrate_bot/static_data/states.json"))
+# queries_static_data = json.load(open(settings.BASE_DIR/"bi_reports_illustrate_bot/static_data/queries.json"))
 
-# inline_pay_button = InlineKeyboardButton.a(text=ButtonText.PAY.value, callback_data=ButtonText.PAY.value)
-# inline_pay_button.a(text='ali')
+# merge dynamic and static data
+buttons_data, keyboards_data, states_data, queries_data = [{}, {}, {}, {}]
 
-# inline_back_button = InlineKeyboardButton.a(text=ButtonText.CNL.value, callback_data=ButtonText.CNL.value)
-# inline_switch_context = InlineKeyboardButton.a(text='alaki', switch_inline_query_current_chat='mohsen')
+buttons_data.update(buttons_static_data)
+buttons_data.update(buttons_dynamic_data)
 
-# select_cols_inline_keyboard = InlineKeyboardMarkup.a(inline_keyboard=[[inline_pay_button]])
-# input_params_keyboard = InlineKeyboardMarkup.a(inline_keyboard=[
-#     list(x) for x in np.array_split([InlineKeyboardButton.a(text=c, callback_data=c) for c in dv.get_all_fields()],
-#                                     dv.num_of_fields() / 3)
-# ])
+keyboards_data.update(keyboards_static_data)
+keyboards_data.update(keyboards_dynamic_data)
 
+states_data.update(states_static_data)
+states_data.update(states_dynamic_data)
 
-# menu_keyboard = ReplyKeyboardMarkup.a(keyboard=[
-#     [
-#         KeyboardButton.a(text=ButtonText.PIE.value),
-#         KeyboardButton.a(text=ButtonText.LIN.value),
-#     ],
-#     [
-#         KeyboardButton.a(text=ButtonText.GRP.value),
-#         KeyboardButton.a(text=ButtonText.BAR.value),
-#     ]
-# ], resize_keyboard=True)
-
-# auth_keyboard = ReplyKeyboardMarkup.a(keyboard=[
-#     [
-#         KeyboardButton.a(text=ButtonText.AUT.value, request_contact=True),
-#     ]
-# ], resize_keyboard=True)
-
-
-# def get_valid_query_names(state_name: str):
-#     try:
-#         return states_data[state_name]['queries']
-#     except:
-#         return []
-
-
-# def get_query_obj(state_name: str, query_name: str):
-#     try:
-#         return states_data[state_name]['queries']
-#         data = states_data.get(state_name, None)
-#         if data:
-#             state_queries = data.get('queries', None)
-#             if state_queries and query_name in state_queries:
-#                 return queries_data.get(query_name, None)
-#         return None
+queries_data.update(queries_dynamic_data)
 
 
 def message_trans(state: TelegramState, msg: str):
@@ -133,123 +104,66 @@ def message_trans(state: TelegramState, msg: str):
     print(msg, flush=True)
     return msg
 
+
 def set_vars_from_msg(state: TelegramState, var: str, res: str):
+    is_list = False
+    if var[0] == '+':
+        is_list = True
+        var = var[1:]
     trim_var = var[1:-1]
     parts = trim_var.split('.')
-    state_obj = state.get_memory()[parts[0]]
+    
     if len(parts) == 2:
-        state_obj[parts[1]] = res
+        state_obj = state.get_memory().get(parts[0], {})
+        if is_list:
+            state_obj[parts[1]].append(res)
+        else:
+            state_obj[parts[1]] = res
+        state.update_memory({parts[0]: state_obj})
     elif len(parts) == 1:
-        state_obj = res
-    state.update_memory({parts[0]: state_obj})
+        if is_list:
+            res = state.get_memory().get(parts[0], []).append(res)
+        state.update_memory({parts[0]: res})
+        
     
     
-def go_to_prev_state(bot, state: TelegramState, msg=None):    
-    if state.name == MEDIA_STATE:
-        state_obj = state.get_memory()
-        state_obj.pop('query', None)
-        state_obj.pop('filters', None)
-        next_state_name = state_obj.pop('state', 'auth_home')
+def go_to_prev_state(bot, state: TelegramState, msg=None):  
+    state_obj = state.get_memory()
+    if state_obj.get("states", None):
+        state_obj["states"].pop(-1)
         state.set_memory(state_obj)
+    if state.name == MEDIA_STATE:
+        next_state_name = state_obj["states"][0]
     else:        
         next_state_name =  re.sub('(.*)_.*', r'\1', state.name)
-    go_to_state(bot, state, next_state_name)    
+    go_to_state(bot, state, next_state_name)
     
     
 def go_to_state(bot: TelegramBot, state: TelegramState, state_name: str, msg=None):
     chat_id = state.telegram_chat.telegram_id
+    state_obj = state.get_memory()
+    
     state.set_name(state_name)
     msg = msg if msg else states_data[state_name]['msgs'][0]
     msg = message_trans(state, msg)
-    keyboard = get_keyboard_of_state(state_name=state_name)
-    bot.sendMessage(chat_id, msg, reply_markup=keyboard)
+    reply_keyboard = get_reply_keyboard_of_state(state_name)
+    bot.sendMessage(chat_id, msg, reply_markup=reply_keyboard)
+    
+    if state_obj.get('states', None):
+        inline_keyboard = get_inline_keyboard_of_state(state_obj['states'][-1])
+        bot.sendMessage(chat_id, MessageText.CHS.value, reply_markup=inline_keyboard)
 
 
-def get_keyboard_of_state(state_name: str):
-    return keyboards[states_data[state_name]['keyboards'][0]]
+def get_reply_keyboard_of_state(state_name: str):
+    try:
+        return keyboards[states_data[state_name]['keyboards'][0]]
+    except:
+        return None
+
+
+def get_inline_keyboard_of_state(state_name: str):
+    return inline_keyboards.get(state_name, None)
     
-    
-def register_static_data():
-    static_buttons = {
-        "finish": {
-            "text": ButtonText.FNS.value
-        },
-        "accept": {
-            "text": ButtonText.ACP.value
-        },
-        "cancel": {
-            "text": ButtonText.CNL.value
-        },
-        "Pie Chart": {
-            "text": "Pie Chart"
-        },
-        "Multi Group Chart": {
-            "text": "Multi Group Chart"
-        },
-        "Bar Chart": {
-            "text": "Bar Chart"
-        },
-        "Linear Chart": {
-            "text": "Linear Chart"
-        },
-        
-    }
-    static_keyboards = {
-        "filter": {
-            "type": "reply",
-            "buttons": [
-                [
-                    "finish"
-                ],
-                [
-                    "home",
-                    "back"
-                ]
-            ]
-        },
-        "adjustFilter": {
-            "type": "reply",
-            "buttons": [
-                [
-                    "cancel",
-                    "accept"
-                ]
-            ]
-        },     
-    }
-    static_states = {
-        "query_filter": {
-            "keyboards": [
-                "filter"
-            ],
-            "msgs": [
-                "Please select a filter to apply."
-            ]
-        },
-        "query_filter_adjust": {
-            "keyboards": [
-                "adjustFilter"
-            ],
-            "msgs": [
-                "Adjust the filter"
-            ]
-        },
-        "query_filter_run": {
-            "keyboards": [
-                "back_and_home"
-            ],
-            "msgs": [
-                "The drawing is in process..."
-            ]
-        }
-    }
-    buttons_data.update(static_buttons)
-    keyboards_data.update(static_keyboards)
-    states_data.update(static_states)
-    
-    
-# add static data to user data
-register_static_data()
 
 # buttons translator
 button_trans = {v['text']: k for k,v in buttons_data.items()}
@@ -298,9 +212,7 @@ auth_keyboard = ReplyKeyboardMarkup.a(keyboard=[
 fake_inline_keyboard = InlineKeyboardMarkup.a([[InlineKeyboardButton.a(text='test', callback_data='test')]])
 
 # create inline query keyboards
-query_keyboards = dict() # key: state_name, value: queries of this state as in an inline keyboard
-filter_keybaords = dict() # key: query_name, value: filters of this query as in an inline keyboards
-chart_keyboards = dict() # key: query_name, value: allowed charts of this query as inline keyboards
+inline_keyboards = dict()
 
 for st_name, data in states_data.items():
     queries = data.get('queries', None)
@@ -312,7 +224,7 @@ for st_name, data in states_data.items():
                     callback_data=query_name
                 )      
             ])
-            if query_name not in filter_keybaords:
+            if "query_filter_"+query_name not in inline_keyboards:
                 filter_keyboard_inline_buttons = list()
                 for filt in queries_data[query_name]['filters']:
                     filter_keyboard_inline_buttons.append([
@@ -320,9 +232,17 @@ for st_name, data in states_data.items():
                             callback_data=filt
                         )      
                     ])
-                filter_keybaords[query_name] = InlineKeyboardMarkup.a(filter_keyboard_inline_buttons)
+                    if "query_filter_adjust_"+filt not in inline_keyboards:
+                        adj_filter_keyboard_inline_buttons = list()
+                        adj_filter_keyboard_inline_buttons.append([
+                            InlineKeyboardButton.a(text='test',
+                                callback_data='test'
+                            )
+                        ])
+                        inline_keyboards["query_filter_adjust_"+filt] = InlineKeyboardMarkup.a(adj_filter_keyboard_inline_buttons)
+                inline_keyboards["query_filter_"+query_name] = InlineKeyboardMarkup.a(filter_keyboard_inline_buttons)
 
-            if query_name not in chart_keyboards:
+            if "query_filter_run_"+query_name not in inline_keyboards:
                 chart_keyboard_inline_buttons = list()
                 for chart in queries_data[query_name]['charts']:
                     chart_keyboard_inline_buttons.append([
@@ -330,9 +250,5 @@ for st_name, data in states_data.items():
                             callback_data=chart
                         )
                     ])
-                chart_keyboards[query_name] = InlineKeyboardMarkup.a(chart_keyboard_inline_buttons)
-        query_keyboards[st_name] = InlineKeyboardMarkup.a(query_keyboard_inline_buttons)
-
-just_before_query_states = [re.sub('(.*)_.*', r'\1', qkb) for qkb in query_keyboards]
-
-
+                inline_keyboards["query_filter_run_" + query_name] = InlineKeyboardMarkup.a(chart_keyboard_inline_buttons)
+        inline_keyboards[st_name] = InlineKeyboardMarkup.a(query_keyboard_inline_buttons)

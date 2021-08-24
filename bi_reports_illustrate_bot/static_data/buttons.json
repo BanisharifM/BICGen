@@ -1,0 +1,23 @@
+{
+    "finish": {
+        "text": "ّFinish"
+    },
+    "accept": {
+        "text": "Accept"
+    },
+    "cancel": {
+        "text": "Cancel"
+    },
+    "Pie Chart": {
+        "text": "Pie Chart"
+    },
+    "Multi Group Chart": {
+        "text": "Multi Group Chart"
+    },
+    "Bar Chart": {
+        "text": "Bar Chart"
+    },
+    "Linear Chart": {
+        "text": "Linear Chart"
+    }
+}

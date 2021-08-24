@@ -1,0 +1,23 @@
+{
+  "filter": {
+      "type": "reply",
+      "buttons": [
+          [
+              "finish"
+          ],
+          [
+              "home",
+              "back"
+          ]
+      ]
+  },
+  "adjustFilter": {
+      "type": "reply",
+      "buttons": [
+          [
+              "cancel",
+              "accept"
+          ]
+      ]
+  }
+}

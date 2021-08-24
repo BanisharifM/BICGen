@@ -1,0 +1,22 @@
+{
+  "start": "Hi {},  Welcome to the CBIC.\nIf you are sure you are registered in the bot, click the “Authenticate”.\nOtherwise, contact to admin.",
+  "reset": "Hi {},  Welcome to the CBIC.\nIf you are sure you are registered in the bot, click the “Authenticate”.\nOtherwise, contact to admin.",
+  "Authenticate": {
+    "Successful": "You are authenticated successfully.",
+    "Fail": "I'm sorry, No users were found with your information.\nPlease contact to admin."
+  },
+  "Home": "Main menu",
+  "Settings": "Settings",
+  "Help": "Hi {}! 🌷\n\n💡 You can make a report, by:\nHome 👉 Make a Report 👉 [selecting report section] 👉 [select report] 👉 [filter parameter of report]\n\n💡 You can see your past reports, by:\nHome 👉 Reports List 👉 [filter List by date]\n\n💡 You can see your profile and change it, by:\nHome 👉 Profile 👉 Change Profile 👉 [changing item you allowed]\n\n💡 You can go settings ⚙ and see About, Help and Support, by:\nHome 👉 settings\n\nIf there’s a question click “Support” and send a ticket to us. 🙏",
+  "About": "This bot was  born to make a report for business intelligence.\nYou will be able to customize it too.\nVersion 1.0.0",
+  "Support": "Support",
+  "New_Ticket": "Please send your question or suggestion. 🙏",
+  "Profile": "Your Profile:\nFirst Name: {}\nLast Name: {}\nPhone Number: {}\nJob Position: {}",
+  "Change_Profile": "You can change your First Name and LastName.\nFor changing Phone Number or Job Position click “Support” and send a ticket to us.",
+  "First Name": "Please enter your First Name.",
+  "Last Name": "Please enter your Last Name.",
+  "Report_List": "Your Past Reports:[Report_List_Item]\n\nPage {} of {}, total {}",
+  "Report_List_Item": "\n\n{}.📝 {}\n📆 {}\n⬇ {}",
+  "Make_Report": "Please Choose one of the below sections.",
+  "Wrong_Command": "Remember, since I'm a robot and not a real human, it's best to spell words correctly or use the buttons below."
+}

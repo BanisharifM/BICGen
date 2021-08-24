@@ -1,0 +1,31 @@
+{
+    "query_filter": {
+        "input": "+{states}",
+        "keyboards": [
+            "filter"
+        ],
+        "msgs": [
+            "Please select a filter to apply."
+        ],
+        "jump": "query_filter_adjust"
+    },
+    "query_filter_adjust": {
+        "input": "+{states}",
+        "keyboards": [
+            "adjustFilter"
+        ],
+        "msgs": [
+            "Adjust the filter"
+        ],
+        "jump": "query_filter_run"
+    },
+    "query_filter_run": {
+        "keyboards": [
+            "back_and_home"
+        ],
+        "msgs": [
+            "Just one step!"
+        ],
+        "jump": "query_filter_run"
+    }
+}
