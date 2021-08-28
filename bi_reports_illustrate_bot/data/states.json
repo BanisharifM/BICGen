@@ -49,9 +49,11 @@
   },
   "auth_home_profile": {
     "keyboards": [
+      "back_and_home",
       "profile"
     ],
     "msgs": [
+      "profile",
       "Your Profile:\nFirst Name: {profile.first_name}\nLast Name: {profile.last_name}\nPhone Number: {profile.mobile_number}"
     ]
   },

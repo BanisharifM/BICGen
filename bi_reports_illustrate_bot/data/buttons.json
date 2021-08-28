@@ -8,7 +8,7 @@
     "newReport": {
         "text": "Make a Report \ud83d\udcdd"
     },
-    "reportList": {
+    "reportsList": {
         "text": "Reports List \ud83d\udcc3"
     },
     "profile": {
@@ -70,8 +70,5 @@
     },
     "sell": {
         "text": "Sell"
-    },
-    "listQueries": {
-        "text": "List Reports"
     }
 }

@@ -46,7 +46,9 @@ class TelegramBot(AbstractTelegramBot):
             if msg in ['/restart', '/start']:
                 state.set_name('')
             elif msg == 'home':
-                state.update_memory({'states': []})
+                state_obj = state.get_memory()
+                state_obj.pop('states', None)
+                state.set_memory(state_obj)
                 go_to_state(bot, state, 'auth_home', 'home')
             elif msg == 'back':
                 go_to_prev_state(bot,state, msg)

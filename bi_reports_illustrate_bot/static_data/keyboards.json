@@ -1,23 +1,65 @@
 {
-  "filter": {
-      "type": "reply",
-      "buttons": [
-          [
-              "finish"
-          ],
-          [
-              "home",
-              "back"
-          ]
-      ]
-  },
-  "adjustFilter": {
-      "type": "reply",
-      "buttons": [
-          [
-              "cancel",
-              "accept"
-          ]
-      ]
-  }
+    "filter": {
+        "type": "reply",
+        "buttons": [
+            [
+                "finish"
+            ],
+            [
+                "home",
+                "back"
+            ]
+        ]
+    },
+    "adjustFilter": {
+        "type": "reply",
+        "buttons": [
+            [
+                "cancel",
+                "accept"
+            ]
+        ]
+    },
+    "reportsList": {
+        "type": "inline",
+        "buttons": [
+            [
+                "prev",
+                "next"
+            ],
+            [
+                "home"
+            ]
+        ]
+    },
+    "reportsListNoNext": {
+        "type": "inline",
+        "buttons": [
+            [
+                "prev"
+            ],
+            [
+                "home"
+            ]
+        ]
+    },
+    "reportsListNoPrev": {
+        "type": "inline",
+        "buttons": [
+            [
+                "next"
+            ],
+            [
+                "home"
+            ]
+        ]
+    },
+    "reportsListNoNextNoPrev": {
+        "type": "inline",
+        "buttons": [
+            [
+                "home"
+            ]
+        ]
+    }
 }

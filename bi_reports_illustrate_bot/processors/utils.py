@@ -51,7 +51,7 @@ class ButtonText(Enum):
     ACP = 'Accept'
     CNL = 'Cancel'
     
-
+RESULT_PER_PAGE = 5
 
 # Commands
 charts = {
@@ -86,6 +86,23 @@ states_data.update(states_static_data)
 states_data.update(states_dynamic_data)
 
 queries_data.update(queries_dynamic_data)
+
+def get_message_from_update(bot: TelegramBot ,update: Update):
+    msg = ''
+    try:
+        if update.is_callback_query():
+                callback_query = update.get_callback_query()
+                msg = callback_query.get_data()
+                bot.answerCallbackQuery(callback_query_id=callback_query.get_id(), text="Received!")
+        else:
+            msg = update.get_message().get_text()
+        
+        if button_trans.get(msg, None):
+            msg = button_trans[msg]
+    except Exception as e:
+        print(str(e))
+    return msg
+    
 
 
 def message_trans(state: TelegramState, msg: str):
@@ -126,7 +143,6 @@ def set_vars_from_msg(state: TelegramState, var: str, res: str):
         state.update_memory({parts[0]: res})
         
     
-    
 def go_to_prev_state(bot, state: TelegramState, msg=None):  
     state_obj = state.get_memory()
     if state_obj.get("states", None):
@@ -143,27 +159,96 @@ def go_to_state(bot: TelegramBot, state: TelegramState, state_name: str, msg=Non
     chat_id = state.telegram_chat.telegram_id
     state_obj = state.get_memory()
     
-    state.set_name(state_name)
     msg = msg if msg else states_data[state_name]['msgs'][0]
     msg = message_trans(state, msg)
-    reply_keyboard = get_reply_keyboard_of_state(state_name)
-    bot.sendMessage(chat_id, msg, reply_markup=reply_keyboard)
+    keyboards_of_state = get_keyboards_of_state(state_name)
+    if keyboards_of_state:
+        state.set_name(state_name)
+        bot.sendMessage(chat_id, msg, reply_markup=keyboards_of_state[0]) # reply keyboard
+        if len(keyboards_of_state) == 2:
+            parse_mode=""
+            if state_name == 'auth_home_reportsList':
+                update_reports_list_config(state, 'init')
+                msg = get_reports_list(state)
+                state_obj = state.get_memory()
+                kb_name = state_obj["reportsKeyboardName"]
+                keyboards_of_state[1] = keyboards[kb_name]
+                parse_mode="MarkdownV2"
+            else: 
+                msg = states_data[state_name]['msgs'][1]
+                msg = message_trans(state, msg)
+            sent_msg = bot.sendMessage(chat_id=chat_id, text=msg, reply_markup=keyboards_of_state[1], parse_mode=parse_mode) # inline keyboard 
+            
+            state_obj["last_inline_message_id"] = sent_msg.get_message_id()
+            state.set_memory(state_obj)
+    else:
+        go_to_prev_state(bot, state)
+        return
     
     if state_obj.get('states', None):
         inline_keyboard = get_inline_keyboard_of_state(state_obj['states'][-1])
         bot.sendMessage(chat_id, MessageText.CHS.value, reply_markup=inline_keyboard)
 
-
-def get_reply_keyboard_of_state(state_name: str):
+    
+def get_keyboards_of_state(state_name: str):
     try:
-        return keyboards[states_data[state_name]['keyboards'][0]]
+        return [keyboards[kb_name] for kb_name in states_data[state_name]['keyboards']]
     except:
         return None
 
 
 def get_inline_keyboard_of_state(state_name: str):
     return inline_keyboards.get(state_name, None)
+
+
+def update_reports_list_config(state: TelegramState, msg='init'):
+    state_obj = state.get_memory()
     
+    if msg == 'init':
+        state_obj.pop('reportsListConfig', None)
+    
+    # get current page
+    cur_page = None
+    reports_list_config = state_obj.get("reportsListConfig", None)
+    if reports_list_config:
+        cur_page = reports_list_config.get("page", None)
+        
+    if not cur_page:
+        cur_page = 1
+    else:
+        if msg == 'prev' and cur_page > 1:
+            cur_page -= 1
+        if msg == 'next' and cur_page + 1 <= reports_list_config["max_page"]:
+            cur_page += 1
+    
+    report_pages = Report.objects.filter(owner=state.telegram_user).count() / RESULT_PER_PAGE
+    import math
+    report_pages = math.ceil(report_pages)
+    state_obj["reportsListConfig"] = {"page": cur_page, "per_page": RESULT_PER_PAGE, "max_page": report_pages}
+    
+    kb_name = states_data[state.name]['keyboards'][1]
+    if cur_page >= report_pages:
+        kb_name += 'NoNext'
+    if cur_page == 1:
+        kb_name += 'NoPrev'
+    state_obj["reportsKeyboardName"] = kb_name
+    
+    state.set_memory(state_obj)
+
+    
+def get_reports_list(state: TelegramState):
+    # return Report.objects.first().get_test()
+    reports_list_config = state.get_memory()["reportsListConfig"]
+    cur_page = reports_list_config["page"]
+    per_page = reports_list_config["per_page"]
+    start_index = (cur_page - 1) * per_page
+    end_index = start_index + per_page
+    # results = "Reports are:\n\n"
+    results = ""
+    for ind, report in enumerate(Report.objects.filter(owner=state.telegram_user)[start_index:end_index]):
+        results += f"`{start_index + ind + 1}.`\n{report.get_with_icon()}\n\n"
+    return results
+
 
 # buttons translator
 button_trans = {v['text']: k for k,v in buttons_data.items()}
@@ -183,33 +268,12 @@ for kb_name, data in keyboards_data.items():
             resize_keyboard=True
         )
 
-# KEYBOARDS        
-cancel_keyboard = ReplyKeyboardMarkup.a(keyboard=[
-    [
-        KeyboardButton.a(text=ButtonText.CNL.value),
-    ]
-], resize_keyboard=True)
-
-draw_keyboard = ReplyKeyboardMarkup.a(keyboard=[
-    [
-        KeyboardButton.a(text=ButtonText.DRW.value),
-    ]
-], resize_keyboard=True)
-
-finish_keyboard = ReplyKeyboardMarkup.a(keyboard=[
-    [
-        KeyboardButton.a(text=buttons_data['back']['text']),
-        KeyboardButton.a(text=ButtonText.FNS.value),
-    ]
-], resize_keyboard=True)
-
+# Keyboards        
 auth_keyboard = ReplyKeyboardMarkup.a(keyboard=[
     [
         KeyboardButton.a(text=buttons_data['auth']['text'], request_contact=True),
     ]
 ], resize_keyboard=True)
-
-fake_inline_keyboard = InlineKeyboardMarkup.a([[InlineKeyboardButton.a(text='test', callback_data='test')]])
 
 # create inline query keyboards
 inline_keyboards = dict()

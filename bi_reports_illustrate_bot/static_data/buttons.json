@@ -19,5 +19,11 @@
     },
     "Linear Chart": {
         "text": "Linear Chart"
+    },
+    "next": {
+        "text": "Next ➡"
+    },
+    "prev": {
+        "text": "⬅ Previous"
     }
 }

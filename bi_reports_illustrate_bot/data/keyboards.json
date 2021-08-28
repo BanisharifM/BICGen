@@ -12,7 +12,7 @@
     "buttons": [
       [
         "newReport",
-        "reportList"
+        "reportsList"
       ],
       [
         "profile",
@@ -112,18 +112,6 @@
       [
         "recruitment",
         "fire"
-      ],
-      [
-        "home",
-        "back"
-      ]
-    ]
-  },
-  "listQueries": {
-    "type": "reply",
-    "buttons": [
-      [
-        "listQueries"
       ],
       [
         "home",

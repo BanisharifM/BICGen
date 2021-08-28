@@ -27,5 +27,14 @@
             "Just one step!"
         ],
         "jump": "query_filter_run"
+    },
+    "auth_home_reportsList": {
+        "keyboards": [
+            "back_and_home",
+            "reportsList"
+        ],
+        "msgs": [
+            "Welcome to archive of reports!"
+        ]
     }
 }

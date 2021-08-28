@@ -127,7 +127,7 @@ class DataVisualizer:
                 rel_path = f'figs/{name_str}_{datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")}.png'
             full_path = settings.MEDIA_ROOT / rel_path
             fig.savefig(full_path)
-            return full_path
+            return rel_path
         except Exception as e:
             # print("EXCEPTION HAPEND IN CORE.py")
             print(str(e))
