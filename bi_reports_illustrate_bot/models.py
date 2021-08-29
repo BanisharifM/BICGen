@@ -36,13 +36,6 @@ class Report(models.Model):
         f"{settings.BI_SITE_URL + self.fig.url}\n"
         return repr_string
     
-    # def get_with_icon(self):
-    #     repr_string = \
-    #     f"🗒 {self.name}\n" \
-    #     f"📅 {self.created.date()}\n" \
-    #     f"⬇ [Download Link]({settings.BI_SITE_URL + self.fig.url})\n"
-    #     return repr_string
-    
     def get_with_icon(self):
         repr_string = \
         f"🗒 `{self.name}`\n" \

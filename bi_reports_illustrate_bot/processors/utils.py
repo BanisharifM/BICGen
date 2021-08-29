@@ -67,14 +67,14 @@ buttons_dynamic_data = json.load(open(settings.BASE_DIR/"bi_reports_illustrate_b
 keyboards_dynamic_data = json.load(open(settings.BASE_DIR/"bi_reports_illustrate_bot/data/keyboards.json"))
 states_dynamic_data = json.load(open(settings.BASE_DIR/"bi_reports_illustrate_bot/data/states.json"))
 queries_dynamic_data = json.load(open(settings.BASE_DIR/"bi_reports_illustrate_bot/data/queries.json"))
+filters_dynamic_data = json.load(open(settings.BASE_DIR/"bi_reports_illustrate_bot/data/filters.json"))
 
 buttons_static_data = json.load(open(settings.BASE_DIR/"bi_reports_illustrate_bot/static_data/buttons.json"))
 keyboards_static_data = json.load(open(settings.BASE_DIR/"bi_reports_illustrate_bot/static_data/keyboards.json"))
 states_static_data = json.load(open(settings.BASE_DIR/"bi_reports_illustrate_bot/static_data/states.json"))
-# queries_static_data = json.load(open(settings.BASE_DIR/"bi_reports_illustrate_bot/static_data/queries.json"))
 
 # merge dynamic and static data
-buttons_data, keyboards_data, states_data, queries_data = [{}, {}, {}, {}]
+buttons_data, keyboards_data, states_data, queries_data, filters_data = [{}, {}, {}, {}, {}]
 
 buttons_data.update(buttons_static_data)
 buttons_data.update(buttons_dynamic_data)
@@ -86,6 +86,8 @@ states_data.update(states_static_data)
 states_data.update(states_dynamic_data)
 
 queries_data.update(queries_dynamic_data)
+filters_data.update(filters_dynamic_data)
+
 
 def get_message_from_update(bot: TelegramBot ,update: Update):
     msg = ''
@@ -221,10 +223,11 @@ def update_reports_list_config(state: TelegramState, msg='init'):
         if msg == 'next' and cur_page + 1 <= reports_list_config["max_page"]:
             cur_page += 1
     
-    report_pages = Report.objects.filter(owner=state.telegram_user).count() / RESULT_PER_PAGE
+    total = Report.objects.filter(owner=state.telegram_user).count()
+    report_pages = total / RESULT_PER_PAGE
     import math
     report_pages = math.ceil(report_pages)
-    state_obj["reportsListConfig"] = {"page": cur_page, "per_page": RESULT_PER_PAGE, "max_page": report_pages}
+    state_obj["reportsListConfig"] = {"page": cur_page, "per_page": RESULT_PER_PAGE, "max_page": report_pages, "total": total}
     
     kb_name = states_data[state.name]['keyboards'][1]
     if cur_page >= report_pages:
@@ -241,12 +244,14 @@ def get_reports_list(state: TelegramState):
     reports_list_config = state.get_memory()["reportsListConfig"]
     cur_page = reports_list_config["page"]
     per_page = reports_list_config["per_page"]
+    
     start_index = (cur_page - 1) * per_page
     end_index = start_index + per_page
     # results = "Reports are:\n\n"
     results = ""
     for ind, report in enumerate(Report.objects.filter(owner=state.telegram_user)[start_index:end_index]):
         results += f"`{start_index + ind + 1}.`\n{report.get_with_icon()}\n\n"
+    results += f"`Page {cur_page} of {reports_list_config['max_page']}, total {reports_list_config['total']}`"
     return results
 
 
