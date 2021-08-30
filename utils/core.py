@@ -18,6 +18,15 @@ class DataVisualizer:
 
     def get_all_fields(self):
         return self.df.columns.tolist()
+    
+    def get_column_choices(self, col):
+        try:
+            return self.df[col].unique().tolist()
+        except:
+            return []
+    
+    def is_valid_column(self, col):
+        return col in self.df.columns
 
     # Country - Product - Units Sold
     def multi_group_chart(self, groups_col, bars_col, y_col):

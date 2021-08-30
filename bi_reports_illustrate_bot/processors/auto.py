@@ -58,7 +58,7 @@ def report_list(bot: TelegramBot, update: Update, state: TelegramState):
             msg_id = state_obj["last_inline_message_id"]
             kb_name = state_obj["reportsKeyboardName"]
             kb = keyboards[kb_name]
-            bot.editMessageText(text=get_reports_list(state), chat_id=chat_id, message_id=msg_id, reply_markup=kb, parse_mode="MarkdownV2")
+            bot.editMessageText(text=get_reports_list(state), chat_id=chat_id, message_id=msg_id, reply_markup=kb, parse_mode="MarkdownV2", disable_web_page_preview=True)
         else:
             bot.sendMessage(chat_id, MessageText.PVC.value)
         
@@ -85,19 +85,15 @@ def filter_query(bot: TelegramBot, update: Update, state: TelegramState):
             go_to_state(bot, state, next_state_name)
         else:
             query_obj = queries_data.get(state_obj["query"], None)
-            if msg not in query_obj["filters"]:
-                bot.sendMessage(chat_id, MessageText.PVC.value)
-            else:
+            if msg in filters_data and msg in query_obj["filters"]:
                 next_state_name = state.name + '_adjust'
                 state_obj.setdefault("states", []).append(next_state_name + "_" + msg)
-                filters = state_obj.get('filters', {})
-                
-                # TODO: the filter params for adjusment shoud be here
-                filters[msg] = {}
-                
-                state_obj['filters'] = filters
+                state_obj["cur_filter"] = msg
+                state_obj["cur_filter_config"] = {}
                 state.set_memory(state_obj)
                 go_to_state(bot, state, next_state_name)
+            else:
+                bot.sendMessage(chat_id, MessageText.PVC.value)
             
     except Exception as e:
         print(str(e))
@@ -115,22 +111,61 @@ def adjust_filter(bot: TelegramBot, update: Update, state: TelegramState):
         if msg in ["back", "home"]:
             return
         
-        cur_filter = list(state_obj['filters'].keys())[-1]
+        cur_filter = state_obj['cur_filter']
+        cur_config = state_obj['cur_filter_config']
         
-        print(f"message is {msg}")
         # go to run the query
-        if msg == "accept":
+        if msg == "save":
+            if cur_config:
+                state_obj["filters"][cur_filter] = cur_config
             bot.sendMessage(chat_id, MessageText.FAD.value.format(cur_filter))
-            go_to_prev_state(bot, state)
-        elif msg == "cancel":
-            state_obj['filters'].pop(cur_filter, None)
             state.set_memory(state_obj)
             go_to_prev_state(bot, state)
+        elif msg == "cancel":
+            go_to_prev_state(bot, state)
+        else:
+            cur_type = filters_data[cur_filter]['type']
+            cur_filter_msg_id = state_obj["last_inline_message_id"]
             
-        # TODO: write some code to get filter params and adjust filter        
-        elif msg in ['test']:
-            print("you hit some filter adjusment")
-        
+            if cur_type == 'minMax':
+                if cur_config.get('min', None):
+                    if cur_config.get('max', None):
+                        bot.sendMessage(chat_id, MessageText.FDN.value)
+                    else:
+                        if validate_filter_param(msg):
+                            state_obj['cur_filter_config']['max'] = msg
+                        else:
+                            bot.sendMessage(chat_id, MessageText.IFP.value)
+                else:
+                    if validate_filter_param(msg):
+                            state_obj['cur_filter_config']['min'] = msg
+                    else:
+                        bot.sendMessage(chat_id, MessageText.IFP.value)
+                        
+                min_val = state_obj['cur_filter_config'].get('min', '-')
+                max_val = state_obj['cur_filter_config'].get('max', '-')
+                resp = f"from: {min_val}\nto: {max_val}"
+                
+            elif cur_type == 'multiSelect':
+                if msg in dv.get_column_choices(cur_filter):
+                    choices: list = state_obj['cur_filter_config'].get('choices', [])
+                    if msg in choices:
+                        choices.remove(msg)
+                    else:
+                        choices.append(msg)
+                    state_obj['cur_filter_config']['choices'] = choices
+                else:
+                    bot.sendMessage(chat_id, MessageText.IFP.value)
+
+                new_line_char = '\n'
+                resp = f"{cur_filter} filter:\n\n{new_line_char.join(state_obj['cur_filter_config']['choices'])}"
+            
+            # write last data to filter messgae
+            inline_keyboard = get_inline_keyboard_of_state(state_obj['states'][-1])
+            bot.editMessageText(resp, chat_id, cur_filter_msg_id, parse_mode=None, reply_markup=inline_keyboard)
+
+            state.set_memory(state_obj)
+            
         
     except Exception as e:
         print(str(e))

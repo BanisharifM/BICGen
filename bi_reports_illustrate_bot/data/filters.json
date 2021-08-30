@@ -1,16 +1,19 @@
 {
     "day":{
-        "type": "min-max",
-        "column": ""
+        "text": "day",
+        "type": "minMax"
     },
     "month":{
-        "type": "min-max"
+        "text": "month",
+        "type": "minMax"
     },
     "year":{
-        "type": "min-max"
+        "text": "year",
+        "type": "minMax"
     },
     "Country":{
-        "type": "multi-select"
+        "text": "Country",
+        "type": "multiSelect"
     }
 
 }

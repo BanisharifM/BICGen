@@ -37,6 +37,8 @@ class MessageText(Enum):
     CFT = 'Choose a filter'
     FAD = 'Filter {} added successfully!'
     CHS = 'Choose'
+    FDN = 'The filter paramaters already have been set. Click on Save to apply the filter and Cancel to forget this filter'
+    IFP = 'The filter param is invalid. Please enter a valid value'
 
 
 class ButtonText(Enum):
@@ -68,6 +70,21 @@ keyboards_dynamic_data = json.load(open(settings.BASE_DIR/"bi_reports_illustrate
 states_dynamic_data = json.load(open(settings.BASE_DIR/"bi_reports_illustrate_bot/data/states.json"))
 queries_dynamic_data = json.load(open(settings.BASE_DIR/"bi_reports_illustrate_bot/data/queries.json"))
 filters_dynamic_data = json.load(open(settings.BASE_DIR/"bi_reports_illustrate_bot/data/filters.json"))
+
+# * remove the filter names that are not in the columns of dataset
+invalid_filters = []
+for f_name, data in filters_dynamic_data.items():
+    if data['type'] == 'multiSelect' and not dv.is_valid_column(f_name):
+        invalid_filters.append(f_name)
+[filters_dynamic_data.pop(f_name) for f_name in invalid_filters]
+    
+# * remove queries that have no chart for drawing
+invalid_queires = []
+for q_name, data in queries_dynamic_data.items():
+    if not data['charts']:
+        invalid_queires.append(q_name)
+[queries_dynamic_data.pop(q_name) for q_name in invalid_queires]
+    
 
 buttons_static_data = json.load(open(settings.BASE_DIR/"bi_reports_illustrate_bot/static_data/buttons.json"))
 keyboards_static_data = json.load(open(settings.BASE_DIR/"bi_reports_illustrate_bot/static_data/keyboards.json"))
@@ -179,17 +196,22 @@ def go_to_state(bot: TelegramBot, state: TelegramState, state_name: str, msg=Non
             else: 
                 msg = states_data[state_name]['msgs'][1]
                 msg = message_trans(state, msg)
-            sent_msg = bot.sendMessage(chat_id=chat_id, text=msg, reply_markup=keyboards_of_state[1], parse_mode=parse_mode) # inline keyboard 
-            
+                
+            sent_msg = bot.sendMessage(chat_id=chat_id, text=msg, reply_markup=keyboards_of_state[1], parse_mode=parse_mode, disable_web_page_preview=True) # inline keyboard 
             state_obj["last_inline_message_id"] = sent_msg.get_message_id()
-            state.set_memory(state_obj)
+            # state.set_memory(state_obj)
     else:
         go_to_prev_state(bot, state)
         return
     
     if state_obj.get('states', None):
         inline_keyboard = get_inline_keyboard_of_state(state_obj['states'][-1])
-        bot.sendMessage(chat_id, MessageText.CHS.value, reply_markup=inline_keyboard)
+        if inline_keyboard:
+            sent_msg = bot.sendMessage(chat_id, MessageText.CHS.value, reply_markup=inline_keyboard)
+            state_obj["last_inline_message_id"] = sent_msg.get_message_id()
+    
+    # save new state to database
+    state.set_memory(state_obj)
 
     
 def get_keyboards_of_state(state_name: str):
@@ -240,19 +262,26 @@ def update_reports_list_config(state: TelegramState, msg='init'):
 
     
 def get_reports_list(state: TelegramState):
-    # return Report.objects.first().get_test()
     reports_list_config = state.get_memory()["reportsListConfig"]
     cur_page = reports_list_config["page"]
     per_page = reports_list_config["per_page"]
     
     start_index = (cur_page - 1) * per_page
     end_index = start_index + per_page
-    # results = "Reports are:\n\n"
     results = ""
     for ind, report in enumerate(Report.objects.filter(owner=state.telegram_user)[start_index:end_index]):
-        results += f"`{start_index + ind + 1}.`\n{report.get_with_icon()}\n\n"
+        results += f"`{start_index + ind + 1}.`\n{report.get_with_icon()}\n"
     results += f"`Page {cur_page} of {reports_list_config['max_page']}, total {reports_list_config['total']}`"
     return results
+
+
+def validate_filter_param(param: str):
+    return True
+        
+
+def update_filter_message(bot: TelegramBot, state: TelegramState):
+    pass
+
 
 
 # buttons translator
@@ -283,6 +312,7 @@ auth_keyboard = ReplyKeyboardMarkup.a(keyboard=[
 # create inline query keyboards
 inline_keyboards = dict()
 
+# create keyboard for queries of a leaf state
 for st_name, data in states_data.items():
     queries = data.get('queries', None)
     if queries:
@@ -293,31 +323,41 @@ for st_name, data in states_data.items():
                     callback_data=query_name
                 )      
             ])
-            if "query_filter_"+query_name not in inline_keyboards:
-                filter_keyboard_inline_buttons = list()
-                for filt in queries_data[query_name]['filters']:
-                    filter_keyboard_inline_buttons.append([
-                        InlineKeyboardButton.a(text=filt,
-                            callback_data=filt
-                        )      
-                    ])
-                    if "query_filter_adjust_"+filt not in inline_keyboards:
-                        adj_filter_keyboard_inline_buttons = list()
-                        adj_filter_keyboard_inline_buttons.append([
-                            InlineKeyboardButton.a(text='test',
-                                callback_data='test'
-                            )
-                        ])
-                        inline_keyboards["query_filter_adjust_"+filt] = InlineKeyboardMarkup.a(adj_filter_keyboard_inline_buttons)
-                inline_keyboards["query_filter_"+query_name] = InlineKeyboardMarkup.a(filter_keyboard_inline_buttons)
-
-            if "query_filter_run_"+query_name not in inline_keyboards:
-                chart_keyboard_inline_buttons = list()
-                for chart in queries_data[query_name]['charts']:
-                    chart_keyboard_inline_buttons.append([
-                        InlineKeyboardButton.a(text=chart,
-                            callback_data=chart
-                        )
-                    ])
-                inline_keyboards["query_filter_run_" + query_name] = InlineKeyboardMarkup.a(chart_keyboard_inline_buttons)
         inline_keyboards[st_name] = InlineKeyboardMarkup.a(query_keyboard_inline_buttons)
+
+
+for q_name, data in queries_data.items():
+    # create keyboard for filters of a query
+    filter_keyboard_inline_buttons = list()
+    for filt in data['filters']:
+        if filt in filters_data:
+            filter_keyboard_inline_buttons.append([
+                InlineKeyboardButton.a(text=filters_data[filt]["text"],
+                    callback_data=filt
+                )      
+            ])
+    if filter_keyboard_inline_buttons:
+        inline_keyboards["query_filter_"+q_name] = InlineKeyboardMarkup.a(filter_keyboard_inline_buttons)
+
+    # create keyboard for charts of a query
+    chart_keyboard_inline_buttons = list()
+    for chart in data['charts']:
+        chart_keyboard_inline_buttons.append([
+            InlineKeyboardButton.a(text=chart,
+                callback_data=chart
+            )
+        ])
+    inline_keyboards["query_filter_run_" + q_name] = InlineKeyboardMarkup.a(chart_keyboard_inline_buttons)
+            
+    
+# add keyboard of each filter to inline keyboards
+for f_name, data in filters_data.items():
+    if data["type"] == 'multiSelect':
+        adj_filter_keyboard_inline_buttons = list()
+        for choice in dv.get_column_choices(f_name):
+            adj_filter_keyboard_inline_buttons.append([
+                InlineKeyboardButton.a(text=choice,
+                    callback_data=choice
+                )
+            ])
+        inline_keyboards["query_filter_adjust_"+f_name] = InlineKeyboardMarkup.a(adj_filter_keyboard_inline_buttons)

@@ -16,7 +16,7 @@
         "buttons": [
             [
                 "cancel",
-                "accept"
+                "save"
             ]
         ]
     },
@@ -26,9 +26,6 @@
             [
                 "prev",
                 "next"
-            ],
-            [
-                "home"
             ]
         ]
     },
@@ -37,9 +34,6 @@
         "buttons": [
             [
                 "prev"
-            ],
-            [
-                "home"
             ]
         ]
     },
@@ -48,18 +42,12 @@
         "buttons": [
             [
                 "next"
-            ],
-            [
-                "home"
             ]
         ]
     },
     "reportsListNoNextNoPrev": {
         "type": "inline",
         "buttons": [
-            [
-                "home"
-            ]
         ]
     }
 }
