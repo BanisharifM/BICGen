@@ -136,8 +136,6 @@ def message_trans(state: TelegramState, msg: str):
             if result is None:
                 return None
         msg = msg.replace(var, result)
-        print(msg)
-    print(msg, flush=True)
     return msg
 
 
@@ -282,6 +280,24 @@ def validate_filter_param(param: str):
 def update_filter_message(bot: TelegramBot, state: TelegramState):
     pass
 
+
+def get_filters_repr(filters: dict):
+    res = ""
+    for name, config in filters.items():
+        if "choices" in config:
+            config_repr = get_multi_select_repr(config)
+        else:
+            config_repr = get_min_max_repr(config)
+        res = f"{name}:\n{config_repr}\n\n"
+    return res
+
+
+def get_multi_select_repr(filter_config: dict):
+    return ', '.join(filter_config['choices'])
+
+
+def get_min_max_repr(filter_config: dict):
+    return f"from {filter_config['min']} to {filter_config['max']}"
 
 
 # buttons translator

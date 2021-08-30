@@ -52,19 +52,6 @@ class TelegramBot(AbstractTelegramBot):
                 go_to_state(bot, state, 'auth_home', 'home')
             elif msg == 'back':
                 go_to_prev_state(bot,state, msg)
-                # if state.name == MEDIA_STATE:
-                # if state.name.startswith('query')
-                # next_state_name = re.sub('(.*)_.*', r'\1', state.name)
-                # next_state_keyboard = go_to_state(state, next_state_name)
-                # bot.sendMessage(chat_id, msg, reply_markup=next_state_keyboard)
-            # elif msg == ButtonText.CNL.value:
-            #     state.set_name('menu')
-            #     bot.sendMessage(update.get_chat().get_id(), ButtonText.CNL.value, reply_markup=menu_keyboard)
-            #     memory_state = state.get_memory()
-            #     msg_id = memory_state.pop('params_message_id', None)
-            #     if msg_id is not None:
-            #         bot.deleteMessage(update.get_chat().get_id(), msg_id)
-            #         state.set_memory(memory_state)
         except Exception as e:
             print(str(e))
 
@@ -72,9 +59,8 @@ class TelegramBot(AbstractTelegramBot):
         super(TelegramBot, self).post_processing(update, user, db_user, chat, db_chat, state)
         print(f'state memory is : {state.get_memory()}')
         print(f'state name is : {state.name}')
-        print(50 * '-')
-        print(flush=True)
-        chat_id = update.get_chat().get_id()
+        print(50 * '-', flush=True)
+        # chat_id = update.get_chat().get_id()
         # bot.sendMessage(chat_id, f'state memory is : {state.get_memory()}')
         # bot.sendMessage(chat_id, f'state name is : {state.name}')
 

@@ -119,9 +119,13 @@ def adjust_filter(bot: TelegramBot, update: Update, state: TelegramState):
             if cur_config:
                 state_obj["filters"][cur_filter] = cur_config
             bot.sendMessage(chat_id, MessageText.FAD.value.format(cur_filter))
+            # print("before print filters")
+            bot.sendMessage(chat_id, get_filters_repr(state_obj["filters"]))
+            # print("after print filters")
             state.set_memory(state_obj)
             go_to_prev_state(bot, state)
         elif msg == "cancel":
+            bot.sendMessage(chat_id, get_filters_repr(state_obj["filters"]))
             go_to_prev_state(bot, state)
         else:
             cur_type = filters_data[cur_filter]['type']
