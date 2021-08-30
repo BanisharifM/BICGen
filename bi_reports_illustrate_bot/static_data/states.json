@@ -3,7 +3,7 @@
     "input": "+{states}",
     "keyboards": ["filter"],
     "msgs": [
-      "Now it's filter time. You can filter your report by selecting the below filters. Otherwise, click the *Finish*."
+      "Now it's filter time\\. You can filter your report by selecting the below filters\\. Otherwise, click the *Finish*\\."
     ],
     "jump": "query_filter_adjust"
   },
@@ -16,7 +16,7 @@
   "query_filter_run": {
     "keyboards": ["back_and_home"],
     "msgs": [
-      "Just one step remains! You want to have your report with which chart? Select it."
+      "Just one step remains\\! You want to have your report with which chart? Select it\\."
     ],
     "jump": "query_filter_run"
   },
