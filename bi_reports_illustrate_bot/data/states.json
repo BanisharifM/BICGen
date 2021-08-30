@@ -1,172 +1,95 @@
 {
   "auth_home": {
-    "keyboards": [
-      "home"
-    ],
-    "msgs": [
-      "You are authenticated successfully."
-    ]
+    "keyboards": ["home"],
+    "msgs": ["You are authenticated successfully."]
   },
   "auth_home_settings": {
-    "keyboards": [
-      "settings"
-    ],
-    "msgs": [
-      "Please select one of these."
-    ]
+    "keyboards": ["settings"],
+    "msgs": ["Please select one of these."]
   },
   "auth_home_settings_help": {
-    "keyboards": [
-      "back_and_home"
-    ],
+    "keyboards": ["back_and_home"],
     "msgs": [
-      "Hi {profile.first_name}! 🌷\n\n1️⃣ You can make a report 📝, by:\nHome 👉 Make a Report 👉 [selecting report section] 👉 [select report] 👉 [filter parameter of report]\n\n2️⃣ You can see your past reports 📃, by:\nHome 👉 Reports List 👉 [filter List by date]\n\n3️⃣ You can see your profile and change it ✏️, by:\nHome 👉 Profile 👉 Change Profile 👉 [changing item you allowed]\n\n4️⃣ You can go settings ⚙ and see About, Help and Support, by:\nHome 👉 settings\n\nIf there’s a question click “Support” and send a ticket to us. 🙏"
+      "Hi {profile.first_name}! 🌷\n\n1️⃣ You can make a report 📝, by:\n*Home* 👉 *Make a Report* 👉 [selecting report section] 👉 [select report] 👉 [filter parameter of report]\n\n2️⃣ You can see your past reports 📃, by:\nHome 👉 Reports List 👉 [filter List by date]\n\n3️⃣ You can see your profile and change it ✏️, by:\nHome 👉 Profile 👉 Change Profile 👉 [changing item you allowed]\n\n4️⃣ You can go settings ⚙ and see About, Help and Support, by:\nHome 👉 settings\n\nIf there’s a question click *Support* and send a ticket to us. 🙏"
     ]
   },
   "auth_home_settings_about": {
-    "keyboards": [
-      "back_and_home"
-    ],
+    "keyboards": ["back_and_home"],
     "msgs": [
       "This bot was  born to make a report for business intelligence.\nYou will be able to customize it too.\nVersion 1.0.0"
     ]
   },
   "auth_home_settings_support": {
-    "keyboards": [
-      "support"
-    ],
-    "msgs": [
-      "Please select one of these."
-    ]
+    "keyboards": ["support"],
+    "msgs": ["If you want to send a ticket to us, click the *New Ticket*."]
   },
   "auth_home_settings_support_newTicket": {
-    "keyboards": [
-      "back_and_home"
-    ],
-    "msgs": [
-      "Under Construction..."
-    ]
+    "keyboards": ["back_and_home"],
+    "msgs": ["Under Construction🔧."]
   },
   "auth_home_profile": {
-    "keyboards": [
-      "back_and_home",
-      "profile"
-    ],
+    "keyboards": ["back_and_home", "profile"],
     "msgs": [
-      "profile",
-      "Your Profile:\nFirst Name: {profile.first_name}\nLast Name: {profile.last_name}\nPhone Number: {profile.mobile_number}"
+      "\ud83d\udc64 Your Profile is:",
+      "First Name: {profile.first_name}\nLast Name: {profile.last_name}\nPhone Number: {profile.mobile_number}"
     ]
   },
   "auth_home_profile_changeProfile": {
-    "keyboards": [
-      "changeProfile"
-    ],
+    "keyboards": ["changeProfile"],
     "msgs": [
       "You can change your First Name and LastName.\nFor changing Phone Number send a ticket to us."
     ]
   },
   "auth_home_profile_changeProfile_firstName": {
     "input": "{profile.first_name}",
-    "keyboards": [
-      "back_and_home"
-    ],
-    "msgs": [
-      "Please enter your First Name."
-    ],
+    "keyboards": ["back_and_home"],
+    "msgs": ["Please enter your First Name."],
     "jump": "auth_home_profile_changeProfile"
   },
   "auth_home_profile_changeProfile_lastName": {
     "input": "{profile.last_name}",
-    "keyboards": [
-      "back_and_home"
-    ],
-    "msgs": [
-      "Please enter your Last Name."
-    ],
+    "keyboards": ["back_and_home"],
+    "msgs": ["Please enter your Last Name."],
     "jump": "auth_home_profile_changeProfile"
   },
   "auth_home_reportList": {
-    "keyboards": [
-      "back_and_home"
-    ],
-    "msgs": [
-      "Under Construction..."
-    ]
+    "keyboards": ["back_and_home"],
+    "msgs": ["Under Construction..."]
   },
   "auth_home_newReport": {
-    "keyboards": [
-      "sections"
-    ],
-    "msgs": [
-      "Please select one of these."
-    ]
+    "keyboards": ["sections"],
+    "msgs": ["Please select one of these sections."]
   },
   "auth_home_newReport_fin": {
-    "keyboards": [
-      "finSections"
-    ],
-    "msgs": [
-      "Please select one of these."
-    ]
+    "keyboards": ["finSections"],
+    "msgs": ["Please select one of these *Financial* subsection."]
   },
   "auth_home_newReport_fin_sell": {
     "input": "{query}",
-    "keyboards": [
-      "back_and_home"
-    ],
-    "msgs": [
-      "Please select one of these."
-    ],
-    "queries": [
-      "q1",
-      "q2"
-    ]
+    "keyboards": ["back_and_home"],
+    "msgs": ["Please select one of these *Sell*'s Reports."],
+    "queries": ["q1", "q2"]
   },
   "auth_home_newReport_fin_profit": {
     "input": "{query}",
-    "keyboards": [
-      "back_and_home"
-    ],
-    "msgs": [
-      "Please select one of these."
-    ],
-    "queries": [
-      "q1",
-      "q2"
-    ]
+    "keyboards": ["back_and_home"],
+    "msgs": ["Please select one of these *Profit*'s Reports."],
+    "queries": ["q1", "q2"]
   },
   "auth_home_newReport_hr": {
-    "keyboards": [
-      "hrSections"
-    ],
-    "msgs": [
-      "Please select one of these."
-    ]
+    "keyboards": ["hrSections"],
+    "msgs": ["Please select one of these *HR* subsection."]
   },
   "auth_home_newReport_hr_recruitment": {
     "input": "{query}",
-    "keyboards": [
-      "back_and_home"
-    ],
-    "msgs": [
-      "Please select one of these."
-    ],
-    "queries": [
-      "q1",
-      "q2"
-    ]
+    "keyboards": ["back_and_home"],
+    "msgs": ["Please select one of these *Recruitment*'s Reports."],
+    "queries": ["q1", "q2"]
   },
   "auth_home_newReport_hr_fire": {
     "input": "{query}",
-    "keyboards": [
-      "back_and_home"
-    ],
-    "msgs": [
-      "Please select one of these."
-    ],
-    "queries": [
-      "q3",
-      "q4"
-    ]
+    "keyboards": ["back_and_home"],
+    "msgs": ["Please select one of these *Fire*'s Reports."],
+    "queries": ["q3", "q4"]
   }
 }

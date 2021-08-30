@@ -1,74 +1,74 @@
 {
-    "auth": {
-        "text": "Authentication \ud83d\udd10"
-    },
-    "home": {
-        "text": "\ud83c\udfd8 Home"
-    },
-    "newReport": {
-        "text": "Make a Report \ud83d\udcdd"
-    },
-    "reportsList": {
-        "text": "Reports List \ud83d\udcc3"
-    },
-    "profile": {
-        "text": "Profile \ud83d\udc64"
-    },
-    "settings": {
-        "text": "Settings \u2699"
-    },
-    "help": {
-        "text": "Help \ud83d\udca1"
-    },
-    "support": {
-        "text": "Support \ud83d\udc68\u200d\ud83d\udcbb"
-    },
-    "about": {
-        "text": "About \ud83e\udea7"
-    },
-    "back": {
-        "text": "\ud83d\udd19 Back"
-    },
-    "newTicket": {
-        "text": "New Ticket \ud83d\udcec"
-    },
-    "reply": {
-        "text": "\u21a9 reply"
-    },
-    "close": {
-        "text": "close \u274c"
-    },
-    "changeProfile": {
-        "text": "Change Profile"
-    },
-    "firstName": {
-        "text": "First Name"
-    },
-    "lastName": {
-        "text": "Last Name"
-    },
-    "prev": {
-        "text": "\u2b05 Previous"
-    },
-    "next": {
-        "text": "Next \u27a1"
-    },
-    "hr": {
-        "text": "HR"
-    },
-    "fin": {
-        "text": "Financial"
-    },
-    "recruitment": {
-        "text": "Recruitment"
-    },
-    "fire": {
-        "text": "Fire"
-    },
-    "profit": {
-        "text": "Profit"
-    },
-    "sell": {
-        "text": "Sell"
-    }
+  "auth": {
+    "text": "Authentication \ud83d\udd10"
+  },
+  "home": {
+    "text": "\ud83c\udfd8 Home"
+  },
+  "newReport": {
+    "text": "Make a Report \ud83d\udcdd"
+  },
+  "reportsList": {
+    "text": "Reports List \ud83d\udcc3"
+  },
+  "profile": {
+    "text": "Profile \ud83d\udc64"
+  },
+  "settings": {
+    "text": "Settings \u2699"
+  },
+  "help": {
+    "text": "Help \ud83d\udca1"
+  },
+  "support": {
+    "text": "Support \ud83d\udc68\u200d\ud83d\udcbb"
+  },
+  "about": {
+    "text": "About \ud83e\udea7"
+  },
+  "back": {
+    "text": "\ud83d\udd19 Back"
+  },
+  "newTicket": {
+    "text": "New Ticket \ud83d\udcec"
+  },
+  "reply": {
+    "text": "\u21a9 reply"
+  },
+  "close": {
+    "text": "close \u274c"
+  },
+  "changeProfile": {
+    "text": "Change Profile"
+  },
+  "firstName": {
+    "text": "First Name"
+  },
+  "lastName": {
+    "text": "Last Name"
+  },
+  "prev": {
+    "text": "\u2b05 Previous"
+  },
+  "next": {
+    "text": "Next \u27a1"
+  },
+  "hr": {
+    "text": "HR"
+  },
+  "fin": {
+    "text": "Financial"
+  },
+  "recruitment": {
+    "text": "Recruitment"
+  },
+  "fire": {
+    "text": "Fire"
+  },
+  "profit": {
+    "text": "Profit"
+  },
+  "sell": {
+    "text": "Sell"
+  }
 }
