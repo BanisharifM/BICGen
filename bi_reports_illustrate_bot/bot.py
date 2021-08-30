@@ -45,13 +45,13 @@ class TelegramBot(AbstractTelegramBot):
                 msg = button_trans[msg]
             if msg in ['/restart', '/start']:
                 state.set_name('')
-            elif msg == '\ud83c\udfd8 Home':
+            elif msg == "home":
                 state_obj = state.get_memory()
                 state_obj.pop('states', None)
                 state.set_memory(state_obj)
-                go_to_state(bot, state, 'auth_home', 'home')
-            elif msg == '\ud83d\udd19 Back':
-                go_to_prev_state(bot,state, msg)
+                go_to_state(bot, state, 'auth_home')
+            elif msg == "back":
+                go_to_prev_state(bot,state)
         except Exception as e:
             print(str(e))
 

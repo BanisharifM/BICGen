@@ -23,6 +23,7 @@ def auth(bot: TelegramBot, update: Update, state: TelegramState):
         # res = MessageText.SLG.value.format(mobile_number)
         res_text = states_data['auth_home']['msgs'][0]
         res_keyboard = keyboards[states_data['auth_home']['keyboards'][0]]
+        bot.sendMessage(chat_id, "You are authenticated successfully.")
         bot.sendMessage(chat_id, res_text, reply_markup=res_keyboard)
         state_obj = state.get_memory()
         if state_obj.get('profile', None) is None:

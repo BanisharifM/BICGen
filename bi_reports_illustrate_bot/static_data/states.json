@@ -22,6 +22,6 @@
   },
   "auth_home_reportsList": {
     "keyboards": ["back_and_home", "reportsList"],
-    "msgs": ["Welcome to archive of your reports!"]
+    "msgs": ["Welcome to archive of your reports\\!"]
   }
 }

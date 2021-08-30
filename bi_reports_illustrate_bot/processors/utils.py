@@ -30,13 +30,13 @@ class MessageText(Enum):
     CHP = 'Choose {}th parameter'
     CHT = 'Choose target'
     CTD = 'Click on download button for downloading the chart'
-    INV = 'Invalid Choice '
+    INV = 'Invalid Choice'
     CNL = 'If you want to cancel the process, click on cancel button'
     PVC = 'Please Enter a valid choice'
     FSU = 'The field registered'
     CFT = 'Choose a filter'
     FAD = 'Filter {} added successfully!'
-    CHS = 'Choose'
+    CHS = 'Select one of following items\:'
     FDN = 'The filter paramaters already have been set. Click on Save to apply the filter and Cancel to forget this filter'
     IFP = 'The filter param is invalid. Please enter a valid value'
 
@@ -169,7 +169,7 @@ def go_to_prev_state(bot, state: TelegramState, msg=None):
         next_state_name = state_obj["states"][0]
     else:        
         next_state_name =  re.sub('(.*)_.*', r'\1', state.name)
-    go_to_state(bot, state, next_state_name)
+    go_to_state(bot, state, next_state_name, msg)
     
     
 def go_to_state(bot: TelegramBot, state: TelegramState, state_name: str, msg=None):
@@ -181,7 +181,8 @@ def go_to_state(bot: TelegramBot, state: TelegramState, state_name: str, msg=Non
     keyboards_of_state = get_keyboards_of_state(state_name)
     if keyboards_of_state:
         state.set_name(state_name)
-        bot.sendMessage(chat_id, msg, reply_markup=keyboards_of_state[0]) # reply keyboard
+        print(msg)
+        bot.sendMessage(chat_id, msg, reply_markup=keyboards_of_state[0], parse_mode="MarkdownV2") # reply keyboard
         if len(keyboards_of_state) == 2:
             parse_mode=""
             if state_name == 'auth_home_reportsList':
@@ -205,7 +206,7 @@ def go_to_state(bot: TelegramBot, state: TelegramState, state_name: str, msg=Non
     if state_obj.get('states', None):
         inline_keyboard = get_inline_keyboard_of_state(state_obj['states'][-1])
         if inline_keyboard:
-            sent_msg = bot.sendMessage(chat_id, MessageText.CHS.value, reply_markup=inline_keyboard)
+            sent_msg = bot.sendMessage(chat_id, MessageText.CHS.value, reply_markup=inline_keyboard, parse_mode="MarkdownV2")
             state_obj["last_inline_message_id"] = sent_msg.get_message_id()
     
     # save new state to database
