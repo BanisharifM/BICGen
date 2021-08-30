@@ -30,7 +30,7 @@
   "auth_home_profile": {
     "keyboards": ["back_and_home", "profile"],
     "msgs": [
-      "\ud83d\udc64 Your Profile is:",
+      "Your Profile is \ud83d\udc64 :",
       "First Name: {profile.first_name}\nLast Name: {profile.last_name}\nPhone Number: {profile.mobile_number}"
     ]
   },
@@ -63,13 +63,13 @@
   "auth_home_newReport_fin_sell": {
     "input": "{query}",
     "keyboards": ["back_and_home"],
-    "msgs": ["Please select one of these *Sell*'s Reports\\."],
+    "msgs": ["These are *Sell*'s reports\\."],
     "queries": ["q1", "q2"]
   },
   "auth_home_newReport_fin_profit": {
     "input": "{query}",
     "keyboards": ["back_and_home"],
-    "msgs": ["Please select one of these *Profit*'s Reports\\."],
+    "msgs": ["These are *Profit*'s reports\\."],
     "queries": ["q1", "q2"]
   },
   "auth_home_newReport_hr": {
@@ -79,13 +79,13 @@
   "auth_home_newReport_hr_recruitment": {
     "input": "{query}",
     "keyboards": ["back_and_home"],
-    "msgs": ["Please select one of these *Recruitment*'s Reports\\."],
+    "msgs": ["These are *Recruitment*'s reports\\."],
     "queries": ["q1", "q2"]
   },
   "auth_home_newReport_hr_fire": {
     "input": "{query}",
     "keyboards": ["back_and_home"],
-    "msgs": ["Please select one of these *Fire*'s Reports\\."],
+    "msgs": ["These are *Fire*'s reports\\."],
     "queries": ["q3", "q4"]
   }
 }
