@@ -1,122 +1,61 @@
 {
   "auth": {
     "type": "reply",
-    "buttons": [
-      [
-        "auth"
-      ]
-    ]
+    "buttons": [["auth"]]
   },
   "home": {
     "type": "reply",
     "buttons": [
-      [
-        "newReport",
-        "reportsList"
-      ],
-      [
-        "profile",
-        "settings"
-      ]
+      ["newReport", "reportsList"],
+      ["profile", "settings"]
     ]
   },
   "settings": {
     "type": "reply",
     "buttons": [
-      [
-        "help",
-        "about",
-        "support"
-      ],
-      [
-        "home",
-        "back"
-      ]
+      ["help", "about", "support"],
+      ["home", "back"]
     ]
   },
   "back_and_home": {
     "type": "reply",
     "text": "Choose!",
-    "buttons": [
-      [
-        "home",
-        "back"
-      ]
-    ]
+    "buttons": [["home", "back"]]
   },
   "support": {
     "type": "reply",
-    "buttons": [
-      [
-        "newTicket"
-      ],
-      [
-        "home",
-        "back"
-      ]
-    ]
+    "buttons": [["newTicket"], ["home", "back"]]
   },
   "profile": {
     "type": "inline",
-    "buttons": [
-      [
-        "changeProfile"
-      ],
-      [
-        "home"
-      ]
-    ]
+    "buttons": [["changeProfile"]]
   },
   "changeProfile": {
     "type": "reply",
     "buttons": [
-      [
-        "firstName",
-        "lastName"
-      ],
-      [
-        "home",
-        "back"
-      ]
+      ["firstName", "lastName"],
+      ["home", "back"]
     ]
   },
   "sections": {
     "type": "reply",
     "buttons": [
-      [
-        "hr",
-        "fin"
-      ],
-      [
-        "home",
-        "back"
-      ]
+      ["hr", "fin"],
+      ["home", "back"]
     ]
   },
   "finSections": {
     "type": "reply",
     "buttons": [
-      [
-        "sell",
-        "profit"
-      ],
-      [
-        "home",
-        "back"
-      ]
+      ["sell", "profit"],
+      ["home", "back"]
     ]
   },
   "hrSections": {
     "type": "reply",
     "buttons": [
-      [
-        "recruitment",
-        "fire"
-      ],
-      [
-        "home",
-        "back"
-      ]
+      ["recruitment", "fire"],
+      ["home", "back"]
     ]
   }
 }

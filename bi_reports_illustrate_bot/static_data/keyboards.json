@@ -1,53 +1,26 @@
 {
-    "filter": {
-        "type": "reply",
-        "buttons": [
-            [
-                "finish"
-            ],
-            [
-                "home",
-                "back"
-            ]
-        ]
-    },
-    "adjustFilter": {
-        "type": "reply",
-        "buttons": [
-            [
-                "cancel",
-                "save"
-            ]
-        ]
-    },
-    "reportsList": {
-        "type": "inline",
-        "buttons": [
-            [
-                "prev",
-                "next"
-            ]
-        ]
-    },
-    "reportsListNoNext": {
-        "type": "inline",
-        "buttons": [
-            [
-                "prev"
-            ]
-        ]
-    },
-    "reportsListNoPrev": {
-        "type": "inline",
-        "buttons": [
-            [
-                "next"
-            ]
-        ]
-    },
-    "reportsListNoNextNoPrev": {
-        "type": "inline",
-        "buttons": [
-        ]
-    }
+  "filter": {
+    "type": "reply",
+    "buttons": [["finish"], ["home", "back"]]
+  },
+  "adjustFilter": {
+    "type": "reply",
+    "buttons": [["cancel", "save"]]
+  },
+  "reportsList": {
+    "type": "inline",
+    "buttons": [["prev", "next"]]
+  },
+  "reportsListNoNext": {
+    "type": "inline",
+    "buttons": [["prev"]]
+  },
+  "reportsListNoPrev": {
+    "type": "inline",
+    "buttons": [["next"]]
+  },
+  "reportsListNoNextNoPrev": {
+    "type": "inline",
+    "buttons": []
+  }
 }
