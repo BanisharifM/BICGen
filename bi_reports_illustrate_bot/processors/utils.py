@@ -295,7 +295,7 @@ def get_filters_repr(filters: dict):
             config_repr = get_multi_select_repr(config)
         else:
             config_repr = get_min_max_repr(config)
-        res = f"{name}:\n{config_repr}\n\n"
+        res += f"{name}:\n{config_repr}\n\n"
     return res
 
 
