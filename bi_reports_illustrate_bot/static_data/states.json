@@ -15,7 +15,7 @@
   },
   "query_filter_run": {
     "keyboards": ["back_and_home"],
-    "msgs": ["Just one step remained\\! What is your intended chart 📊\\?"],
+    "msgs": ["Just one step remained\\!\nWhat is your intended chart 📊\\?"],
     "jump": "query_filter_run"
   },
   "auth_home_reportsList": {

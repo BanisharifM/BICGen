@@ -39,8 +39,8 @@ class MessageText(Enum):
     CHS = 'Select one of following items\:'
     FDN = 'The filter paramaters already have been set. Click on Save to apply the filter and Cancel to forget this filter'
     IFP = 'The filter param is invalid ✖\nPlease enter a valid value 🙏'
-    NFT = 'We are in {}\\. You can touch _*finish*_ button to go to the next step'  # Report State
-    AFT = 'We are in {}\\. Now select your intended filters 🔍'  # Apply Filter
+    NFT = 'We are in {}\\.\nYou can touch _*finish*_ button to go to the next step'  # Report State
+    AFT = 'We are in {}\\.\nNow select your intended filters 🔍'  # Apply Filter
 
 
 class ButtonText(Enum):
