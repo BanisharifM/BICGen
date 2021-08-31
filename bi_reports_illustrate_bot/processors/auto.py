@@ -125,9 +125,7 @@ def adjust_filter(bot: TelegramBot, update: Update, state: TelegramState):
             if cur_config:
                 state_obj["filters"][cur_filter] = cur_config
             bot.sendMessage(chat_id, MessageText.FAD.value.format(cur_filter))
-            # print("before print filters")
             bot.sendMessage(chat_id, get_filters_repr(state_obj["filters"]))
-            # print("after print filters")
             state.set_memory(state_obj)
             go_to_prev_state(bot, state)
         elif msg == "cancel":
@@ -225,12 +223,12 @@ for state_name, data in states_dynamic_data.items():
     if data.get('queries', None):
         handle_state = f"""next_state_name = MEDIA_STATE + "_" + msg
         if next_state_name in inline_keyboards:
-            state_obj["filters"] = dict()
-            state_obj.setdefault("states", []).append(next_state_name)
-            next_state_name = MEDIA_STATE
+            resp = MessageText.AFT.value.format(queries_data[msg]['text'])
         else:
-            bot.sendMessage(chat_id, MessageText.PVC.value)
-            return"""
+            resp = MessageText.NFT.value.format(queries_data[msg]['text'])
+        state_obj["filters"] = dict()
+        state_obj.setdefault("states", []).append(next_state_name)
+        next_state_name = MEDIA_STATE"""
     elif data.get('jump', None):
         handle_state = f"""next_state_name = "{data['jump']}" """
     else:
@@ -243,7 +241,7 @@ for state_name, data in states_dynamic_data.items():
         if next_state_name in inline_keyboards:
             state_obj.setdefault("states", []).append(next_state_name)
         state.set_memory(state_obj)
-        go_to_state(bot, state, next_state_name)"""
+        go_to_state(bot, state, next_state_name, resp)"""
 
     code += f"""\
 @processor(state_manager, from_states="{state_name}")
@@ -257,6 +255,7 @@ def {state_name}(bot, update, state):
         if msg in ["back", "home"]:
             return
         
+        resp = None
             
         {handle_input}
         {handle_state}

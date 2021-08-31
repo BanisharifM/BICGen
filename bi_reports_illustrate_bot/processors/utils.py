@@ -39,6 +39,8 @@ class MessageText(Enum):
     CHS = 'Select one of following items\:'
     FDN = 'The filter paramaters already have been set. Click on Save to apply the filter and Cancel to forget this filter'
     IFP = 'The filter param is invalid. Please enter a valid value'
+    NFT = 'We are in {}\\. You can touch _*finish*_ button to go to the next step' # Report State
+    AFT = 'We are in {}\\. Now select your intended filters 🔍' # Apply Filter
 
 
 class ButtonText(Enum):
@@ -105,6 +107,8 @@ states_data.update(states_dynamic_data)
 queries_data.update(queries_dynamic_data)
 filters_data.update(filters_dynamic_data)
 
+
+# def get_markdown_from()
 
 def get_message_from_update(bot: TelegramBot ,update: Update):
     msg = ''
@@ -184,19 +188,17 @@ def go_to_state(bot: TelegramBot, state: TelegramState, state_name: str, msg=Non
         print(msg)
         bot.sendMessage(chat_id, msg, reply_markup=keyboards_of_state[0], parse_mode="MarkdownV2") # reply keyboard
         if len(keyboards_of_state) == 2:
-            parse_mode=""
             if state_name == 'auth_home_reportsList':
                 update_reports_list_config(state, 'init')
                 msg = get_reports_list(state)
                 state_obj = state.get_memory()
                 kb_name = state_obj["reportsKeyboardName"]
                 keyboards_of_state[1] = keyboards[kb_name]
-                parse_mode="MarkdownV2"
             else: 
                 msg = states_data[state_name]['msgs'][1]
                 msg = message_trans(state, msg)
                 
-            sent_msg = bot.sendMessage(chat_id=chat_id, text=msg, reply_markup=keyboards_of_state[1], parse_mode=parse_mode, disable_web_page_preview=True) # inline keyboard 
+            sent_msg = bot.sendMessage(chat_id=chat_id, text=msg, reply_markup=keyboards_of_state[1], parse_mode="MarkdownV2", disable_web_page_preview=True) # inline keyboard 
             state_obj["last_inline_message_id"] = sent_msg.get_message_id()
             # state.set_memory(state_obj)
     else:

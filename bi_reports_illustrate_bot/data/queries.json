@@ -11,7 +11,7 @@
     "text": "Report2",
     "params": ["Product", "Country"],
     "target": "Units Sold",
-    "filters": [],
+    "filters": ["Country"],
     "charts": ["Multi Group Chart"],
     "roles": ["manager", "owner"]
   },

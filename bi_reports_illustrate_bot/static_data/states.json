@@ -2,19 +2,19 @@
   "query_filter": {
     "input": "+{states}",
     "keyboards": ["filter"],
-    "msgs": ["🔍 magnifier"],
+    "msgs": ["We are in {query} report\\. Now select your intended filters 🔍"],
     "jump": "query_filter_adjust"
   },
   "query_filter_adjust": {
     "input": "+{states}",
     "keyboards": ["adjustFilter"],
-    "msgs": ["Adjust the filter"],
+    "msgs": ["We are in {cur_filter} filter"],
     "jump": "query_filter_run"
   },
   "query_filter_run": {
     "keyboards": ["back_and_home"],
     "msgs": [
-      "Just one step remains\\! You want to have your report with which chart?"
+      "Just one step remained\\! What is your intended chart\\?"
     ],
     "jump": "query_filter_run"
   },
