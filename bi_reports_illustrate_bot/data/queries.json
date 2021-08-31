@@ -3,7 +3,7 @@
     "text": "Report1",
     "params": ["Product", "Country"],
     "target": "Units Sold",
-    "filters": ["day"],
+    "filters": [],
     "charts": ["Multi Group Chart"],
     "roles": ["manager", "owner"]
   },
@@ -11,7 +11,7 @@
     "text": "Report2",
     "params": ["Product", "Country"],
     "target": "Units Sold",
-    "filters": ["month"],
+    "filters": [],
     "charts": ["Multi Group Chart"],
     "roles": ["manager", "owner"]
   },
@@ -19,7 +19,7 @@
     "text": "Report3",
     "params": ["Product", "Country"],
     "target": "Units Sold",
-    "filters": ["year"],
+    "filters": [],
     "charts": ["Multi Group Chart"],
     "roles": ["manager", "owner"]
   },
@@ -27,7 +27,7 @@
     "text": "Report4",
     "params": ["Product", "Country"],
     "target": "Units Sold",
-    "filters": ["Country"],
+    "filters": [],
     "charts": ["Multi Group Chart"],
     "roles": ["manager", "owner"]
   }

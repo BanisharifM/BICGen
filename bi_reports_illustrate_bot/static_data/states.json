@@ -2,9 +2,7 @@
   "query_filter": {
     "input": "+{states}",
     "keyboards": ["filter"],
-    "msgs": [
-      "Now it's filter time\\. You can filter your report by selecting the below filters\\. Otherwise, click the *Finish*\\."
-    ],
+    "msgs": ["🔍 magnifier"],
     "jump": "query_filter_adjust"
   },
   "query_filter_adjust": {

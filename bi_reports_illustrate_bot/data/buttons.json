@@ -5,6 +5,9 @@
   "home": {
     "text": "\ud83c\udfd8 Home"
   },
+  "ltr-home": {
+    "text": "Home \ud83c\udfd8 "
+  },
   "newReport": {
     "text": "Make a Report \ud83d\udcdd"
   },
