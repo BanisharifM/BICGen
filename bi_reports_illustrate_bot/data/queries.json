@@ -19,7 +19,7 @@
     "text": "Profit by Month Name",
     "params": ["Month Name"],
     "target": "Profit",
-    "filters": ["Units Sold", "Month Name", "Profit"],
+    "filters": ["Units Sold", "Month Name"],
     "charts": ["Pie Chart", "Bar Chart", "Linear Chart"],
     "roles": ["manager", "owner"]
   },

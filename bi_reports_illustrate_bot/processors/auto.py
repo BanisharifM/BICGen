@@ -161,9 +161,16 @@ def adjust_filter(bot: TelegramBot, update: Update, state: TelegramState):
                     else:
                         bot.sendMessage(chat_id, MessageText.IFP.value)
 
-                min_val = state_obj['cur_filter_config'].get('min', '-')
-                max_val = state_obj['cur_filter_config'].get('max', '-')
-                resp = f"from: {min_val}\nto: {max_val}"
+                min_val = state_obj['cur_filter_config'].get('min', '\\-')
+                max_val = state_obj['cur_filter_config'].get('max', '\\-')
+                
+                if state_obj['cur_filter_config'].get('min', None):
+                    if state_obj['cur_filter_config'].get('max', None):
+                        resp = f"All values gathered\!\n\nfrom: {min_val}\nto: {max_val}"
+                    else:
+                        resp = f"Enter _*to*_ value\n\nfrom: {min_val}\nto: {max_val}"
+                else:
+                    resp = f"Enter _*from*_ value\n\nfrom: {min_val}\nto: {max_val}"
 
             elif cur_type == 'multiSelect':
                 if msg in dv.get_column_choices(cur_filter):
@@ -183,10 +190,9 @@ def adjust_filter(bot: TelegramBot, update: Update, state: TelegramState):
             # write last data to filter messgae
             inline_keyboard = get_inline_keyboard_of_state(
                 state_obj['states'][-1])
-            print(inline_keyboard)
-            print(cur_filter_msg_id)
-            bot.editMessageText(resp, chat_id, cur_filter_msg_id,
+            res = bot.editMessageText(resp, chat_id, cur_filter_msg_id,
                                 parse_mode="MarkdownV2", reply_markup=inline_keyboard)
+            print(res)
 
             state.set_memory(state_obj)
 

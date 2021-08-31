@@ -290,7 +290,7 @@ def get_reports_list(state: TelegramState):
     start_index = (cur_page - 1) * per_page
     end_index = start_index + per_page
     results = ""
-    for ind, report in enumerate(Report.objects.filter(owner=state.telegram_user)[start_index:end_index]):
+    for ind, report in enumerate(Report.objects.filter(owner=state.telegram_user).order_by('-id')[start_index:end_index]):
         results += f"`{start_index + ind + 1}.`\n{report.get_with_icon()}\n"
     results += f"`Page {cur_page} of {reports_list_config['max_page']}, total {reports_list_config['total']}`"
     return results
