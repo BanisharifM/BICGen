@@ -1,15 +1,15 @@
 {
   "q1": {
-    "text": "‫‪Sales‬‬ ‫‪by‬‬ ‫‪Product‬‬",
-    "params": ["‪Product‬‬"],
-    "target": "‫‪Sales‬‬",
+    "text": "Sales by Product",
+    "params": ["Product"],
+    "target": "Sales",
     "filters": [],
     "charts": ["Pie Chart", "Bar Chart", "Linear Chart"],
     "roles": ["manager", "owner"]
   },
   "q2": {
-    "text": "‫‪Unit‬‬ ‫‪Sold‬‬ ‫‪by‬‬ ‫‪Segment‬‬",
-    "params": ["‫‪Segment‬‬"],
+    "text": "‫‪Units‬‬ ‫‪Sold‬‬ ‫‪by‬‬ ‫‪Segment‬‬",
+    "params": ["Segment"],
     "target": "Units Sold",
     "filters": [],
     "charts": ["Pie Chart", "Bar Chart", "Linear Chart"],
@@ -24,7 +24,7 @@
     "roles": ["manager", "owner"]
   },
   "q4": {
-    "text": "Unit Sold by Country and Product",
+    "text": "Units Sold by Country and Product",
     "params": ["Product", "Country"],
     "target": "Units Sold",
     "filters": [],
@@ -56,7 +56,7 @@
     "roles": ["manager", "owner"]
   },
   "q8": {
-    "text": "Unit Sold by Segment and Product",
+    "text": "Units Sold by Segment and Product",
     "params": ["Product", "Segment"],
     "target": "Units Sold",
     "filters": [],
