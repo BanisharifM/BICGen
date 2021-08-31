@@ -11,7 +11,7 @@
     "text": "‫‪Units‬‬ ‫‪Sold‬‬ ‫‪by‬‬ ‫‪Segment‬‬",
     "params": ["Segment"],
     "target": "Units Sold",
-    "filters": ["Segment"],
+    "filters": ["Segment","Country"],
     "charts": ["Pie Chart", "Bar Chart", "Linear Chart"],
     "roles": ["manager", "owner"]
   },

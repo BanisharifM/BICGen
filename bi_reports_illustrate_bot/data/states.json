@@ -74,7 +74,7 @@
   },
   "auth_home_newReport_hr": {
     "keyboards": ["hrSections"],
-    "msgs": ["Please select one of these *HR* subsection"]
+    "msgs": ["Please select one of these *HR test* subsection"]
   },
   "auth_home_newReport_hr_recruitment": {
     "input": "{query}",
