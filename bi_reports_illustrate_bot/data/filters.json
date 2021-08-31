@@ -14,6 +14,10 @@
     "Country":{
         "text": "Country",
         "type": "multiSelect"
+    },
+    "Month Number":{
+        "text": "Month Number",
+        "type": "minMax"
     }
 
 }

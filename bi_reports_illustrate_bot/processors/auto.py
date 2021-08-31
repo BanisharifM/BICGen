@@ -98,6 +98,10 @@ def filter_query(bot: TelegramBot, update: Update, state: TelegramState):
                 state_obj["cur_filter_config"] = {}
                 state.set_memory(state_obj)
                 go_to_state(bot, state, next_state_name)
+                if filters_data[msg]["type"] == 'minMax':
+                    sent_msg = bot.sendMessage(chat_id, 'Enter/Select your intended values')
+                    state_obj["last_inline_message_id"] = sent_msg.get_message_id()
+                    state.set_memory(state_obj)
             else:
                 bot.sendMessage(chat_id, MessageText.PVC.value)
 
@@ -194,7 +198,7 @@ def run_query(bot: TelegramBot, update: Update, state: TelegramState):
 
         if msg in query_obj['charts']:
             method_of_drawing = msg.lower().replace(' ', '_')
-            rel_path = dv.draw_and_save_fig(
+            rel_path = dv.draw_and_save_fig(state_obj["filters"],
                 method_of_drawing, *query_obj['params'], query_obj['target'])
             if rel_path:
                 rel_path = str(rel_path)

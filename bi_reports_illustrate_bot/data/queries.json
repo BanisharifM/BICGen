@@ -3,7 +3,7 @@
     "text": "Sales by Product",
     "params": ["Product"],
     "target": "Sales",
-    "filters": [],
+    "filters": ["Country", "Month Number"],
     "charts": ["Pie Chart", "Bar Chart", "Linear Chart"],
     "roles": ["manager", "owner"]
   },

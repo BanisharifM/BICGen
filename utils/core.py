@@ -11,7 +11,8 @@ from pandas import DataFrame
 class DataVisualizer:
     def __init__(self, rel_file_path='Financial Sample.xlsx'):
         my_sheet = 'Sheet1'
-        self.df: DataFrame = pd.read_excel(settings.BASE_DIR / rel_file_path, sheet_name=my_sheet)
+        self.main_df: DataFrame = pd.read_excel(settings.BASE_DIR / rel_file_path, sheet_name=my_sheet)
+        self.df: DataFrame = self.main_df.copy()
 
     def num_of_fields(self):
         return len(self.df.columns)
@@ -125,8 +126,16 @@ class DataVisualizer:
     #         print(str(e))
     #         return False
 
-    def draw_and_save_fig(self, method_name: str, *args, rel_path=None):
+    def draw_and_save_fig(self, filters: dict, method_name: str, *args, rel_path=None):
         try:
+            self.df = self.main_df.copy()
+            for name, config in filters.items():
+                if 'choices' in config:
+                    # self.df = self.df[(self.df[name] in config['choices'])].all()
+                    # print(self.df.loc[lambda x: x[name] == 'config['choices']'])
+                    self.df = self.df[self.df[name].isin(config['choices'])]
+                else:
+                    self.df = self.df[(self.df[name] >= config['min']) & (self.df[name] <= config['max'])]
             method_to_call = getattr(self, method_name)
             fig = method_to_call(*args)
             if not rel_path:

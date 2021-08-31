@@ -206,6 +206,10 @@ def go_to_state(bot: TelegramBot, state: TelegramState, state_name: str, msg=Non
         return
     
     if state_obj.get('states', None):
+        try:
+            bot.deleteMessage(chat_id, state_obj["last_inline_message_id"])
+        except:
+            pass
         inline_keyboard = get_inline_keyboard_of_state(state_obj['states'][-1])
         if inline_keyboard:
             sent_msg = bot.sendMessage(chat_id, MessageText.CHS.value, reply_markup=inline_keyboard, parse_mode="MarkdownV2")
