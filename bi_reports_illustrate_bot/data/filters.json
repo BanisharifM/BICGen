@@ -7,8 +7,8 @@
         "text": "month",
         "type": "minMax"
     },
-    "year":{
-        "text": "year",
+    "Year":{
+        "text": "Year",
         "type": "minMax"
     },
     "Country":{
@@ -18,6 +18,25 @@
     "Month Number":{
         "text": "Month Number",
         "type": "minMax"
+    },
+    "Units Sold":{
+        "text": "Units Sold",
+        "type": "minMax"
+    },
+    "Month Name":{
+        "text": "Month Name",
+        "type": "multiSelect"
+    },
+    "Segment":{
+        "text": "Segment",
+        "type": "multiSelect"
+    },
+    "Product":{
+        "text": "Product",
+        "type": "multiSelect"
+    },
+    "Profit":{
+        "text": "Profit",
+        "type": "minMax"
     }
-
 }

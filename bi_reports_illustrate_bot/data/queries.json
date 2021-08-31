@@ -3,7 +3,7 @@
     "text": "Sales by Product",
     "params": ["Product"],
     "target": "Sales",
-    "filters": ["Country", "Month Number"],
+    "filters": ["Country", "Year"],
     "charts": ["Pie Chart", "Bar Chart", "Linear Chart"],
     "roles": ["manager", "owner"]
   },
@@ -11,7 +11,7 @@
     "text": "‫‪Units‬‬ ‫‪Sold‬‬ ‫‪by‬‬ ‫‪Segment‬‬",
     "params": ["Segment"],
     "target": "Units Sold",
-    "filters": [],
+    "filters": ["Segment"],
     "charts": ["Pie Chart", "Bar Chart", "Linear Chart"],
     "roles": ["manager", "owner"]
   },
@@ -19,7 +19,7 @@
     "text": "Profit by Month Name",
     "params": ["Month Name"],
     "target": "Profit",
-    "filters": [],
+    "filters": ["Units Sold", "Month Name", "Profit"],
     "charts": ["Pie Chart", "Bar Chart", "Linear Chart"],
     "roles": ["manager", "owner"]
   },
@@ -27,7 +27,7 @@
     "text": "Units Sold by Country and Product",
     "params": ["Product", "Country"],
     "target": "Units Sold",
-    "filters": [],
+    "filters": ["Product", "Country", "Segment"],
     "charts": ["Multi Group Chart"],
     "roles": ["manager", "owner"]
   },
@@ -35,7 +35,7 @@
     "text": "Profit by Product",
     "params": ["Product"],
     "target": "Profit",
-    "filters": [],
+    "filters": ["Product"],
     "charts": ["Pie Chart", "Bar Chart", "Linear Chart"],
     "roles": ["manager", "owner"]
   },
@@ -43,7 +43,7 @@
     "text": "Profit by Segment",
     "params": ["Segment"],
     "target": "Profit",
-    "filters": [],
+    "filters": ["Segment"],
     "charts": ["Pie Chart", "Bar Chart", "Linear Chart"],
     "roles": ["manager", "owner"]
   },
@@ -51,7 +51,7 @@
     "text": "Manufacturing Price by Product",
     "params": ["Product"],
     "target": "Manufacturing Price",
-    "filters": [],
+    "filters": ["Product"],
     "charts": ["Pie Chart", "Bar Chart", "Linear Chart"],
     "roles": ["manager", "owner"]
   },
@@ -59,7 +59,7 @@
     "text": "Units Sold by Segment and Product",
     "params": ["Product", "Segment"],
     "target": "Units Sold",
-    "filters": [],
+    "filters": ["Product"],
     "charts": ["Multi Group Chart"],
     "roles": ["manager", "owner"]
   }

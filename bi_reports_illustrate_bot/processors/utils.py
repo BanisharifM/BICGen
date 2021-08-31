@@ -35,12 +35,13 @@ class MessageText(Enum):
     PVC = 'Please Enter a valid choice'
     FSU = 'The field registered'
     CFT = 'Choose a filter'
-    FAD = 'Filter {} added successfully ✔!'
+    FAD = 'Filter {} added successfully ✔'
     CHS = 'Select one of following items\:'
     FDN = 'The filter paramaters already have been set. Click on Save to apply the filter and Cancel to forget this filter'
     IFP = 'The filter param is invalid ✖\nPlease enter a valid value 🙏'
     NFT = 'We are in {}\\.\nYou can touch _*finish*_ button to go to the next step'  # Report State
     AFT = 'We are in {}\\.\nNow select your intended filters 🔍'  # Apply Filter
+    RVA = 'The Values received successfully\\! \nClick on _*Save*_ button to apply these to filter'
 
 
 class ButtonText(Enum):

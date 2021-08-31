@@ -81,7 +81,10 @@ def filter_query(bot: TelegramBot, update: Update, state: TelegramState):
 
         if msg in ["back", "home"]:
             return
-
+        
+        state_obj['query_name'] = queries_data[state_obj["query"]]["text"]
+        state.set_memory(state_obj)
+        
         if msg == "finish":
             next_state_name = state.name + '_run'
             state_obj.setdefault("states", []).append(
@@ -90,6 +93,8 @@ def filter_query(bot: TelegramBot, update: Update, state: TelegramState):
             go_to_state(bot, state, next_state_name)
         else:
             query_obj = queries_data.get(state_obj["query"], None)
+            print(msg)
+            print(query_obj)
             if msg in filters_data and msg in query_obj["filters"]:
                 next_state_name = state.name + '_adjust'
                 state_obj.setdefault("states", []).append(
@@ -99,7 +104,7 @@ def filter_query(bot: TelegramBot, update: Update, state: TelegramState):
                 state.set_memory(state_obj)
                 go_to_state(bot, state, next_state_name)
                 if filters_data[msg]["type"] == 'minMax':
-                    sent_msg = bot.sendMessage(chat_id, 'Enter/Select your intended values')
+                    sent_msg = bot.sendMessage(chat_id, 'Enter start and end value of filter:')
                     state_obj["last_inline_message_id"] = sent_msg.get_message_id()
                     state.set_memory(state_obj)
             else:
@@ -146,6 +151,8 @@ def adjust_filter(bot: TelegramBot, update: Update, state: TelegramState):
                     else:
                         if validate_filter_param(msg):
                             state_obj['cur_filter_config']['max'] = msg
+                            bot.sendMessage(chat_id, MessageText.RVA.value, parse_mode="MarkdownV2",
+                                            reply_markup=get_keyboards_of_state(state.name)[0])
                         else:
                             bot.sendMessage(chat_id, MessageText.IFP.value)
                 else:
@@ -171,13 +178,15 @@ def adjust_filter(bot: TelegramBot, update: Update, state: TelegramState):
                     bot.sendMessage(chat_id, MessageText.IFP.value)
 
                 new_line_char = '\n'
-                resp = f"{cur_filter} filter:\n\n{new_line_char.join(state_obj['cur_filter_config']['choices'])}"
+                resp = f"{MessageText.CHS.value}\n\n{new_line_char.join(state_obj['cur_filter_config']['choices'])}"
 
             # write last data to filter messgae
             inline_keyboard = get_inline_keyboard_of_state(
                 state_obj['states'][-1])
+            print(inline_keyboard)
+            print(cur_filter_msg_id)
             bot.editMessageText(resp, chat_id, cur_filter_msg_id,
-                                parse_mode=None, reply_markup=inline_keyboard)
+                                parse_mode="MarkdownV2", reply_markup=inline_keyboard)
 
             state.set_memory(state_obj)
 

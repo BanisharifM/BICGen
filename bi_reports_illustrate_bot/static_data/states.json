@@ -3,7 +3,7 @@
     "input": "+{states}",
     "keyboards": ["filter"],
     "msgs": [
-      "We are in {query} report\\. Now you can apply your intended filters 🔍"
+      "We are in {query_name} report\\. \nNow you can apply your intended filters 🔍"
     ],
     "jump": "query_filter_adjust"
   },
