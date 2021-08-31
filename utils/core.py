@@ -135,7 +135,7 @@ class DataVisualizer:
                     # print(self.df.loc[lambda x: x[name] == 'config['choices']'])
                     self.df = self.df[self.df[name].isin(config['choices'])]
                 else:
-                    self.df = self.df[(self.df[name] >= config['min']) & (self.df[name] <= config['max'])]
+                    self.df = self.df[(self.df[name] >= int(config['min'])) & (self.df[name] <= int(config['max']))]
             method_to_call = getattr(self, method_name)
             fig = method_to_call(*args)
             if not rel_path:
