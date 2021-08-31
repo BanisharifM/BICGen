@@ -1,31 +1,63 @@
 {
   "q1": {
-    "text": "Report1",
-    "params": ["Product", "Country"],
-    "target": "Units Sold",
+    "text": "‫‪Sales‬‬ ‫‪by‬‬ ‫‪Product‬‬",
+    "params": ["‪Product‬‬"],
+    "target": "‫‪Sales‬‬",
     "filters": [],
-    "charts": ["Multi Group Chart"],
+    "charts": ["Pie Chart", "Bar Chart", "Linear Chart"],
     "roles": ["manager", "owner"]
   },
   "q2": {
-    "text": "Report2",
-    "params": ["Product", "Country"],
+    "text": "‫‪Unit‬‬ ‫‪Sold‬‬ ‫‪by‬‬ ‫‪Segment‬‬",
+    "params": ["‫‪Segment‬‬"],
     "target": "Units Sold",
     "filters": [],
-    "charts": ["Multi Group Chart"],
+    "charts": ["Pie Chart", "Bar Chart", "Linear Chart"],
     "roles": ["manager", "owner"]
   },
   "q3": {
-    "text": "Report3",
+    "text": "Profit by Month Name",
+    "params": ["Month Name"],
+    "target": "Profit",
+    "filters": [],
+    "charts": ["Pie Chart", "Bar Chart", "Linear Chart"],
+    "roles": ["manager", "owner"]
+  },
+  "q4": {
+    "text": "Unit Sold by Country and Product",
     "params": ["Product", "Country"],
     "target": "Units Sold",
     "filters": [],
     "charts": ["Multi Group Chart"],
     "roles": ["manager", "owner"]
   },
-  "q4": {
-    "text": "Report4",
-    "params": ["Product", "Country"],
+  "q5": {
+    "text": "Profit by Product",
+    "params": ["Product"],
+    "target": "Profit",
+    "filters": [],
+    "charts": ["Pie Chart", "Bar Chart", "Linear Chart"],
+    "roles": ["manager", "owner"]
+  },
+  "q6": {
+    "text": "Profit by Segment",
+    "params": ["Segment"],
+    "target": "Profit",
+    "filters": [],
+    "charts": ["Pie Chart", "Bar Chart", "Linear Chart"],
+    "roles": ["manager", "owner"]
+  },
+  "q7": {
+    "text": "Manufacturing Price by Product",
+    "params": ["Product"],
+    "target": "Manufacturing Price",
+    "filters": [],
+    "charts": ["Pie Chart", "Bar Chart", "Linear Chart"],
+    "roles": ["manager", "owner"]
+  },
+  "q8": {
+    "text": "Unit Sold by Segment and Product",
+    "params": ["Product", "Segment"],
     "target": "Units Sold",
     "filters": [],
     "charts": ["Multi Group Chart"],
