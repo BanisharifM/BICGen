@@ -73,7 +73,7 @@ def import_processors():
     from . import processors
 
 
-dv = DataVisualizer(rel_file_path='Financial Sample.xlsx')
+dv = DataVisualizer(rel_file_path='HR Sample.xlsx')
 state_manager = StateManager()
 bot = TelegramBot(bot_token, state_manager)
 # bot.setMyCommands([BotCommand.a('restart', 'Restart The Bot'), BotCommand.a('start', 'Start The Bot')])

@@ -9,9 +9,10 @@ from pandas import DataFrame
 
 
 class DataVisualizer:
-    def __init__(self, rel_file_path='Financial Sample.xlsx'):
+    def __init__(self, rel_file_path='HR Sample.xlsx'):
         my_sheet = 'Sheet1'
-        self.main_df: DataFrame = pd.read_excel(settings.BASE_DIR / rel_file_path, sheet_name=my_sheet)
+        self.main_df: DataFrame = pd.read_excel(
+            settings.BASE_DIR / rel_file_path, sheet_name=my_sheet)
         self.df: DataFrame = self.main_df.copy()
 
     def num_of_fields(self):
@@ -19,19 +20,20 @@ class DataVisualizer:
 
     def get_all_fields(self):
         return self.df.columns.tolist()
-    
+
     def get_column_choices(self, col):
         try:
             return self.df[col].unique().tolist()
         except:
             return []
-    
+
     def is_valid_column(self, col):
         return col in self.df.columns
 
     # Country - Product - Units Sold
     def multi_group_chart(self, groups_col, bars_col, y_col):
-        sorted_groups_col = self.df.groupby([groups_col], sort=False)[y_col].sum().sort_values(ascending=False).index
+        sorted_groups_col = self.df.groupby([groups_col], sort=False)[
+            y_col].sum().sort_values(ascending=False).index
 
         def sort_countries(keys):
             return [sorted_groups_col.tolist().index(country) for country in keys]
@@ -41,7 +43,8 @@ class DataVisualizer:
         grouped_df = self.df.groupby([bars_col, groups_col], sort=False)[y_col].sum().sort_index(
             level=1, key=sort_countries)
         bar_labels = grouped_df.index.get_level_values(0).unique()
-        x = np.arange(stop=2*len(sorted_groups_col), step=2)  # the label locations
+        x = np.arange(stop=2*len(sorted_groups_col),
+                      step=2)  # the label locations
         group_width = 1  # the width of the bars
 
         fig, ax = plt.subplots()
@@ -50,7 +53,8 @@ class DataVisualizer:
         bar_width = group_width / len(bar_labels)
         cur_pos = -group_width / 2
         for bar_label in bar_labels:
-            ax.bar(x + cur_pos, grouped_df[bar_label].values, bar_width, label=bar_label)
+            ax.bar(x + cur_pos,
+                   grouped_df[bar_label].values, bar_width, label=bar_label)
             cur_pos += bar_width
 
             # Store bars for bar labeling
@@ -65,7 +69,8 @@ class DataVisualizer:
 
         # ax.set_title('Units Sold  - by Country and Product')
         ax.set_xticks(x)
-        ax.set_xticklabels([tr.fill(g, width=10) for g in sorted_groups_col], wrap=True)
+        ax.set_xticklabels([tr.fill(g, width=10)
+                            for g in sorted_groups_col], wrap=True)
         ax.set_ylabel(y_col, labelpad=5, fontweight='bold', wrap=True)
         ax.set_xlabel(groups_col, labelpad=5, fontweight='bold', wrap=True)
         ax.legend()
@@ -77,19 +82,23 @@ class DataVisualizer:
     # pie chart
     def pie_chart(self, x_col, y_col):
         # Pie chart, where the slices will be ordered and plotted counter-clockwise:
-        values = self.df.groupby([x_col])[y_col].sum().sort_values(ascending=True)
+        values = self.df.groupby(
+            [x_col])[y_col].sum().sort_values(ascending=True)
         labels = values.index.to_list()
         # labels = [tr.fill(label, width=10) for label in labels]
         # explode = (0, 0.1, 0, 0)  # only "explode" the 2nd slice (i.e. 'Hogs')
         explode = [0 for i in range(len(labels))]
         fig, ax = plt.subplots()
-        ax.pie(values, explode=explode, labels=labels, autopct='%1.1f%%', startangle=90)
-        ax.axis('equal')  # Equal aspect ratio ensures that pie is drawn as a circle.
+        ax.pie(values, explode=explode, labels=labels,
+               autopct='%1.1f%%', startangle=90)
+        # Equal aspect ratio ensures that pie is drawn as a circle.
+        ax.axis('equal')
         fig.suptitle(f'{y_col} by {x_col}')
         return fig
 
     def linear_chart(self, x_col, y_col):
-        values = self.df.groupby([x_col])[y_col].sum().sort_values(ascending=False)
+        values = self.df.groupby(
+            [x_col])[y_col].sum().sort_values(ascending=False)
         labels = values.index.to_list()
         labels = [tr.fill(label, width=10) for label in labels]
         fig, ax = plt.subplots()
@@ -103,7 +112,8 @@ class DataVisualizer:
         return fig
 
     def bar_chart(self, x_col, y_col):
-        values = self.df.groupby([x_col])[y_col].sum().sort_values(ascending=False)
+        values = self.df.groupby(
+            [x_col])[y_col].sum().sort_values(ascending=False)
         labels = values.index.to_list()
         labels = [tr.fill(label, width=10) for label in labels]
         # fig, axs = plt.subplots(nrows=1, ncols=1, figsize=(9, 3))
@@ -135,7 +145,8 @@ class DataVisualizer:
                     # print(self.df.loc[lambda x: x[name] == 'config['choices']'])
                     self.df = self.df[self.df[name].isin(config['choices'])]
                 else:
-                    self.df = self.df[(self.df[name] >= int(config['min'])) & (self.df[name] <= int(config['max']))]
+                    self.df = self.df[(self.df[name] >= int(config['min'])) & (
+                        self.df[name] <= int(config['max']))]
             method_to_call = getattr(self, method_name)
             fig = method_to_call(*args)
             if not rel_path:
