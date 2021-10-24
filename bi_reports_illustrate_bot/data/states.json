@@ -64,13 +64,13 @@
     "input": "{query}",
     "keyboards": ["back_and_home"],
     "msgs": ["These are *Sell*'s reports"],
-    "queries": ["q8", "q4"]
+    "queries": ["Report1", "Report2", "Report3", "Report4"]
   },
   "auth_home_newReport_fin_profit": {
     "input": "{query}",
     "keyboards": ["back_and_home"],
     "msgs": ["These are *Profit*'s reports"],
-    "queries": ["q5", "q6"]
+    "queries": ["Report5", "Report6"]
   },
   "auth_home_newReport_hr": {
     "keyboards": ["hrSections"],
@@ -80,12 +80,12 @@
     "input": "{query}",
     "keyboards": ["back_and_home"],
     "msgs": ["These are *Recruitment*'s reports"],
-    "queries": ["q1", "q7"]
+    "queries": ["Report9", "Report10", "Report11", "Report12"]
   },
   "auth_home_newReport_hr_fire": {
     "input": "{query}",
     "keyboards": ["back_and_home"],
     "msgs": ["These are *Fire*'s reports"],
-    "queries": ["q2", "q3"]
+    "queries": ["Report9", "Report12"]
   }
 }

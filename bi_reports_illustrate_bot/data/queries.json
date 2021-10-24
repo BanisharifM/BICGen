@@ -1,62 +1,126 @@
 {
-  "q1": {
+  "Report1": {
     "text": "Sales by Product",
     "params": ["Product"],
     "target": "Sales",
     "filters": ["Country", "Year"],
-    "charts": ["Pie Chart", "Bar Chart", "Linear Chart"],
+    "charts": ["Bar Chart", "Linear Chart"],
     "roles": ["manager", "owner"]
   },
-  "q2": {
+  "Report2": {
     "text": "‫‪Units‬‬ ‫‪Sold‬‬ ‫‪by‬‬ ‫‪Segment‬‬",
     "params": ["Segment"],
     "target": "Units Sold",
-    "filters": ["Segment","Country"],
-    "charts": ["Pie Chart", "Bar Chart", "Linear Chart"],
+    "filters": ["Segment", "Country"],
+    "charts": ["Pie Chart", "Bar Chart"],
     "roles": ["manager", "owner"]
   },
-  "q3": {
+  "Report3": {
     "text": "Profit by Month Name",
     "params": ["Month Name"],
     "target": "Profit",
     "filters": ["Units Sold", "Month Name"],
-    "charts": ["Pie Chart", "Bar Chart", "Linear Chart"],
+    "charts": ["Bar Chart"],
     "roles": ["manager", "owner"]
   },
-  "q4": {
-    "text": "Units Sold by Country and Product",
+  "Report4": {
+    "text": "Units Sold by Country ",
     "params": ["Product", "Country"],
     "target": "Units Sold",
-    "filters": ["Product", "Country", "Segment"],
+    "filters": ["Product", "Country"],
     "charts": ["Multi Group Chart"],
     "roles": ["manager", "owner"]
   },
-  "q5": {
+  "Report5": {
     "text": "Profit by Product",
     "params": ["Product"],
     "target": "Profit",
     "filters": ["Product"],
-    "charts": ["Pie Chart", "Bar Chart", "Linear Chart"],
+    "charts": ["Pie Chart", "Bar Chart"],
     "roles": ["manager", "owner"]
   },
-  "q6": {
+  "Report6": {
     "text": "Profit by Segment",
     "params": ["Segment"],
     "target": "Profit",
     "filters": ["Segment"],
-    "charts": ["Pie Chart", "Bar Chart", "Linear Chart"],
+    "charts": ["Pie Chart", "Bar Chart"],
     "roles": ["manager", "owner"]
   },
-  "q7": {
+  "Report7": {
     "text": "Manufacturing Price by Product",
     "params": ["Product"],
     "target": "Manufacturing Price",
     "filters": ["Product"],
-    "charts": ["Pie Chart", "Bar Chart", "Linear Chart"],
+    "charts": ["Pie Chart", "Bar Chart"],
     "roles": ["manager", "owner"]
   },
-  "q8": {
-    "text": "Units Sold by Segment and Product",
+  "Report8": {
+    "text": "Units Sold by Segment and",
+    "params": ["Product", "Segment"],
+    "target": "Units Sold",
+    "filters": ["Product"],
+    "charts": ["Multi Group Chart"],
+    "roles": ["manager", "owner"]
+  },
+  "Report9": {
+    "text": "Recruiting Rate by Department",
+    "params": ["Department"],
+    "target": "Recruiting",
+    "filters": ["Month Name"],
+    "charts": ["Pie Chart"],
+    "roles": ["Recruiting Manager"]
+  },
+  "Report10": {
+    "text": "‫‪Salary ‫‪by‬‬ Department",
+    "params": ["Department"],
+    "target": "Salary",
+    "filters": ["Department", "Country"],
+    "charts": ["Bar Chart"],
+    "roles": ["HR Manager", "accountant"]
+  },
+  "Report11": {
+    "text": "Attendance by Month Name",
+    "params": ["Month Name"],
+    "target": "Attendance",
+    "filters": ["Unpaid Leaves"],
+    "charts": ["Bar Chart", "Linear Chart"],
+    "roles": ["HR Manager", "Cashier"]
+  },
+  "Report12": {
+    "text": "Leave Balance by Year Number",
+    "params": ["Year Number"],
+    "target": "Leave",
+    "filters": ["Segment"],
+    "charts": ["Linear Chart"],
+    "roles": ["HR Manager", "Owner"]
+  },
+  "Report13": {
+    "text": "Leave Balance by Product",
+    "params": ["Product"],
+    "target": "Profit",
+    "filters": ["Product"],
+    "charts": ["Pie Chart", "Bar Chart"],
+    "roles": ["manager", "owner"]
+  },
+  "Report14": {
+    "text": "Profit by Segment",
+    "params": ["Segment"],
+    "target": "Profit",
+    "filters": ["Segment"],
+    "charts": ["Pie Chart", "Bar Chart"],
+    "roles": ["manager", "owner"]
+  },
+  "Report15": {
+    "text": "Manufacturing Price by Product",
+    "params": ["Product"],
+    "target": "Manufacturing Price",
+    "filters": ["Product"],
+    "charts": ["Pie Chart", "Bar Chart"],
+    "roles": ["manager", "owner"]
+  },
+  "Report16": {
+    "text": "Units Sold by Segment",
     "params": ["Product", "Segment"],
     "target": "Units Sold",
     "filters": ["Product"],

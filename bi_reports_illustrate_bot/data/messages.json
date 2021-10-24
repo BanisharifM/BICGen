@@ -1,6 +1,6 @@
 {
-  "start": "Hi {},  Welcome to the CBIC.\nIf you are sure you are registered in the bot, click the “Authenticate”.\nOtherwise, contact to admin.",
-  "reset": "Hi {},  Welcome to the CBIC.\nIf you are sure you are registered in the bot, click the “Authenticate”.\nOtherwise, contact to admin.",
+  "start": "Hi {},  Welcome to the Enterprise A HR chatbot.\nIf you are sure you are registered in the bot, click the “Authenticate”.\nOtherwise, contact to admin.",
+  "reset": "Hi {},  Welcome to the Enterprise A HR chatbot.\nIf you are sure you are registered in the bot, click the “Authenticate”.\nOtherwise, contact to admin.",
   "Authenticate": {
     "Successful": "You are authenticated successfully.",
     "Fail": "I'm sorry, No users were found with your information.\nPlease contact to admin."
