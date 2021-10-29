@@ -1,6 +1,6 @@
 ![BIChatbotGenerator logo](Images/logo.png)
 
-###BICGen
+# BICGen
 
 Automatic code generator to build personalized Business Intelligence chatbots for Organizations. It is a model-driven approach that helps business managers, who are non-expert users in programming but aware of the organization needs, easily design and automatically generate chatbot code for the targeted platforms.
 
