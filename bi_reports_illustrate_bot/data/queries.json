@@ -8,7 +8,7 @@
     "roles": ["manager", "owner"]
   },
   "Report2": {
-    "text": "‫‪Units‬‬ ‫‪Sold‬‬ ‫‪by‬‬ ‫‪Segment‬‬",
+    "text": "Unit Sold by Segment",
     "params": ["Segment"],
     "target": "Units Sold",
     "filters": ["Segment", "Country"],
@@ -69,7 +69,7 @@
     "target": "Recruiting",
     "filters": ["Month Name"],
     "charts": ["Pie Chart"],
-    "roles": ["Recruiting Manager"]
+    "roles": ["HR Manager"]
   },
   "Report10": {
     "text": "‫‪Salary ‫‪by‬‬ Department",
@@ -77,7 +77,7 @@
     "target": "Salary",
     "filters": ["Department", "Country"],
     "charts": ["Bar Chart"],
-    "roles": ["HR Manager", "accountant"]
+    "roles": ["HR Manager", "Accountant"]
   },
   "Report11": {
     "text": "Attendance by Month Name",
@@ -85,7 +85,7 @@
     "target": "Attendance",
     "filters": ["Unpaid Leaves"],
     "charts": ["Bar Chart", "Linear Chart"],
-    "roles": ["HR Manager", "Cashier"]
+    "roles": ["HR Manager", "Accountant"]
   },
   "Report12": {
     "text": "Leave Balance by Year Number",
@@ -101,7 +101,7 @@
     "target": "Profit",
     "filters": ["Product"],
     "charts": ["Pie Chart", "Bar Chart"],
-    "roles": ["manager", "owner"]
+    "roles": ["manager", "Owner"]
   },
   "Report14": {
     "text": "Profit by Segment",
